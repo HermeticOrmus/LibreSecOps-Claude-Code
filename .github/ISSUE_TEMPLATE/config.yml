@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & Discussion
+    url: https://github.com/HermeticOrmus/LibreSecOps-Claude-Code/discussions
+    about: Ask questions, share ideas, and discuss security workflows. Use Discussions instead of opening an issue for general questions.
+  - name: Security Vulnerability Disclosure
+    url: https://github.com/HermeticOrmus/LibreSecOps-Claude-Code/security/advisories/new
+    about: Report security vulnerabilities in this project through GitHub Security Advisories. Do not open a public issue for security vulnerabilities.

@@ -1,0 +1,135 @@
+name: Bug Report
+description: Report a problem with a security plugin, agent, command, or hook
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug. Please fill out the sections below so we can diagnose and fix the issue.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part of LibreSecOps is affected?
+      options:
+        - Plugin (security skill)
+        - Agent
+        - Command
+        - Hook
+        - Template
+        - Learning content
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: plugin-name
+    attributes:
+      label: Plugin / Component Name
+      description: Name of the specific plugin, agent, command, or file affected.
+      placeholder: "e.g., vulnerability-scanning, incident-response"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: Clear, specific description of what is not working.
+      placeholder: "Describe the problem in detail."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should happen instead?
+      placeholder: "Describe the correct behavior you expected."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Exact steps to reproduce the bug. Include the prompt or command you used.
+      placeholder: |
+        1. Open Claude Code
+        2. Run command or use prompt: ...
+        3. Observe: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-output
+    attributes:
+      label: Actual Output
+      description: Paste the output, error message, or screenshot showing the bug.
+      render: shell
+    validations:
+      required: false
+
+  - type: input
+    id: claude-version
+    attributes:
+      label: Claude Code Version
+      description: "Run `claude --version` to find this."
+      placeholder: "e.g., 1.0.12"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Linux
+        - macOS
+        - Windows (WSL)
+        - Windows
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: OS Version
+      placeholder: "e.g., Ubuntu 22.04, macOS 14.2, Windows 11"
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Additional Environment Details
+      description: Any other relevant environment details (Node version, security tools installed, etc.)
+      placeholder: |
+        Node: v22.x
+        Tools: nmap 7.94, Burp Suite Community 2024.x
+    validations:
+      required: false
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Workaround
+      description: If you found a workaround, describe it here so others can use it while the fix is in progress.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have searched existing issues and this is not a duplicate.
+          required: true
+        - label: This report does not contain real credentials, API keys, or secrets.
+          required: true
+        - label: This report does not reference active, unpatched vulnerabilities in production systems.
+          required: true

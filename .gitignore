@@ -1,0 +1,78 @@
+# Dependencies
+node_modules/
+vendor/
+.pnp.*
+.yarn/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+credentials.json
+service-account.json
+
+# Build output
+build/
+dist/
+out/
+target/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+
+# IDE & editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+
+# Test & coverage
+coverage/
+.nyc_output/
+*.lcov
+htmlcov/
+
+# Cache & temp
+.cache/
+.tmp/
+.temp/
+*.cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Package manager locks (keep one, ignore others)
+# Uncomment the one you do NOT use:
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Terraform / IaC state (never commit state)
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Docker overrides
+docker-compose.override.yml
+
+# Claude Code local
+.claude/settings.local.json

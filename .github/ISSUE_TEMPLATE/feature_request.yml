@@ -1,0 +1,142 @@
+name: Feature Request
+description: Request a new security plugin, agent, command, or learning content
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a new feature. LibreSecOps grows through community input. Please describe your idea below.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What type of addition are you requesting?
+      options:
+        - New plugin (security skill)
+        - New agent
+        - New command
+        - New hook
+        - New learning content (beginner)
+        - New learning content (intermediate)
+        - New learning content (advanced)
+        - Enhancement to existing plugin
+        - New template
+        - New defense playbook
+        - New attack pattern documentation (educational)
+        - Integration with external tool
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: security-domain
+    attributes:
+      label: Security Domain
+      description: Which area of security does this relate to?
+      options:
+        - Application Security
+        - Cloud Security
+        - Container / Kubernetes Security
+        - Cryptography
+        - Compliance & Governance
+        - DevSecOps
+        - Digital Forensics
+        - Identity & Access Management
+        - Incident Response
+        - Malware Analysis
+        - Mobile Security
+        - Network Security
+        - Penetration Testing
+        - Privacy Engineering
+        - Red Team / Blue Team
+        - Secrets Management
+        - Security Automation
+        - Security Awareness & Training
+        - SIEM & Log Management
+        - Social Engineering Defense
+        - Supply Chain Security
+        - Threat Modeling
+        - Vulnerability Management
+        - Web Application Security
+        - Zero Trust Architecture
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What security challenge or gap does this address? Why does this matter for defenders?
+      placeholder: |
+        Currently there is no way to...
+        Defenders need this because...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe what the plugin, agent, or content should do. Include example prompts or commands if you have them.
+      placeholder: |
+        A plugin that...
+        Example usage:
+        /security:my-new-command --target lab.local
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches did you consider? Why is this approach better?
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References & Prior Art
+      description: Links to relevant standards, tools, research, or similar implementations.
+      placeholder: |
+        - MITRE ATT&CK: T1059
+        - OWASP Testing Guide section X
+        - Tool: https://github.com/example/tool
+    validations:
+      required: false
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Estimated Difficulty
+      description: How complex do you think this would be to implement?
+      options:
+        - Low (documentation or simple prompt)
+        - Medium (new plugin with moderate logic)
+        - High (complex agent or multi-component feature)
+        - Unknown
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Willingness to Contribute
+      description: Would you be willing to help implement this?
+      options:
+        - label: I am willing to submit a PR for this feature.
+        - label: I can help test this feature.
+        - label: I can help write documentation for this feature.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have searched existing issues and this is not a duplicate.
+          required: true
+        - label: This request aligns with responsible disclosure principles (educational focus, no active exploitation).
+          required: true
