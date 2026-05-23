@@ -1,25 +1,29 @@
 # Changelog
 
-All notable changes to LibreSecOps-Claude-Code will be documented in this file.
+## [0.2.0] — 2026-05-23
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [0.1.0] - 2026-02-24
+Doc chrome rewrite + first flagship plugin depth-complete.
 
 ### Added
+- README rewrite matching the LibreUIUX template
+- QUICK_START with 20-minute threat-modeling walkthrough
+- CONTRIBUTING, CHANGELOG, TROUBLESHOOTING
+- setup.sh installer
+- 3-tier learning paths (beginner / intermediate / advanced)
+- **threat-modeling** plugin promoted to depth-complete (STRIDE, attack trees, MITRE ATT&CK mapping, DREAD scoring)
 
-- Initial release with 32 security plugins covering the full spectrum of security operations:
-  - **Offensive:** penetration-testing, red-team-operations, bug-bounty-methodology, web-application-security, api-security-testing, social-engineering-defense
-  - **Defensive:** blue-team-detection, incident-response, forensics-analysis, siem-log-management, security-hardening, security-awareness
-  - **Cloud & Infrastructure:** cloud-security-aws, cloud-security-azure, cloud-security-gcp, container-security, kubernetes-security, network-security, zero-trust-architecture
-  - **Development:** secure-coding-practices, devsecops-pipelines, supply-chain-security, secrets-management, cryptography-essentials
-  - **Governance:** compliance-frameworks, privacy-engineering, identity-access-management, threat-modeling, vulnerability-scanning
-  - **Automation:** security-automation, malware-analysis, mobile-app-security
-- Learning paths organized by difficulty:
-  - Beginner: foundational security concepts and first tools
-  - Intermediate: systematic methodologies and framework integration
-  - Advanced: enterprise-scale operations and complex attack chains
-- 3 automated hooks for security workflow integration
-- Security-focused CLAUDE.md template for project configuration
-- Project infrastructure: MIT license, contributing guidelines, code of conduct, issue templates
+### Per-plugin maturity (32 plugins)
+
+| Status | Count |
+|---|---|
+| depth-complete | 1 (threat-modeling) |
+| shell-improved | 31 |
+
+Depth pass scheduled for v0.3-v0.5:
+- v0.3: incident-response, penetration-testing, web-application-security
+- v0.4: cloud-security-aws, kubernetes-security, container-security, secrets-management
+- v0.5: identity-access-management, zero-trust-architecture, compliance-frameworks
+
+## [0.1.0] — 2026-03-01
+
+Initial release. 32 plugin shells with templated content.
