@@ -4,13 +4,22 @@ Twenty minutes from clone to your first threat model.
 
 ## 1. Install
 
+Inside Claude Code:
+
+```
+/plugin marketplace add HermeticOrmus/LibreSecOps-Claude-Code
+/plugin install threat-modeling@libre-secops
+```
+
+Or install the whole pack from a clone:
+
 ```bash
 git clone https://github.com/HermeticOrmus/LibreSecOps-Claude-Code.git ~/projects/LibreSecOps-Claude-Code
 cd ~/projects/LibreSecOps-Claude-Code
 ./setup.sh
 ```
 
-Restart Claude Code.
+`setup.sh` installs every plugin through the Claude Code CLI (it needs `claude` and `jq`). Restart Claude Code.
 
 ## 2. Pick a feature to threat-model
 
@@ -19,7 +28,7 @@ Use a real feature you're about to ship. Threat modeling abstract systems produc
 ## 3. Ask the threat-model agent
 
 ```
-/threat-model build a STRIDE threat model for a SaaS feature: multi-tenant document storage. Users upload files via web upload, downloaded via signed URLs from S3, with sharing links that have configurable TTLs. Auth is OAuth2 via Google + email/password. The system is for B2B small teams (~10 users per tenant).
+/threat-modeling:threat-model build a STRIDE threat model for a SaaS feature: multi-tenant document storage. Users upload files via web upload, downloaded via signed URLs from S3, with sharing links that have configurable TTLs. Auth is OAuth2 via Google + email/password. The system is for B2B small teams (~10 users per tenant).
 ```
 
 Expected output: scope statement, trust boundary map, STRIDE walk per boundary, ~10-15 specific threats with DREAD scores, mitigations, and MITRE ATT&CK mappings. Top 3 threats called out for executive review.
@@ -31,7 +40,7 @@ If the response is generic ("an attacker could...") instead of specific to your 
 For each accepted-risk threat (not mitigated to zero), ask:
 
 ```
-/threat-model for the top 3 threats in the previous model, design detection for each. What logs, what alert rules, what alert thresholds? Output as Sigma rules where possible.
+/threat-modeling:threat-model for the top 3 threats in the previous model, design detection for each. What logs, what alert rules, what alert thresholds? Output as Sigma rules where possible.
 ```
 
 ## 5. Iterate with the team
