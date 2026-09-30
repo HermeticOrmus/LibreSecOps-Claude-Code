@@ -140,7 +140,7 @@ Grok Build reads the same plugin folders. Add the marketplace, then install any 
 
 ```bash
 grok plugin marketplace add HermeticOrmus/LibreSecOps-Claude-Code
-grok plugin install threat-modeling@libre-secops --trust
+grok plugin install threat-modeling@LibreSecOps-Claude-Code --trust
 ```
 
 Or install one plugin straight from its folder, without adding the marketplace:
