@@ -21,6 +21,19 @@ cd ~/projects/LibreSecOps-Claude-Code
 
 `setup.sh` installs every plugin through the Claude Code CLI (it needs `claude` and `jq`). Restart Claude Code.
 
+### Install in Grok Build
+
+Grok Build reads the same plugin folders. Add the marketplace and install a plugin, or install one plugin straight from its folder:
+
+```bash
+grok plugin marketplace add HermeticOrmus/LibreSecOps-Claude-Code
+grok plugin install threat-modeling@libre-secops --trust
+# or, without the marketplace:
+grok plugin install HermeticOrmus/LibreSecOps-Claude-Code#plugins/threat-modeling --trust
+```
+
+From a clone, `./setup.sh --grok` installs every plugin through the `grok` CLI. Start a new Grok session to load them. The `libre-secops-hooks` plugin uses a hook format Grok supports, but it has not been verified in a live Grok session.
+
 ## 2. Pick a feature to threat-model
 
 Use a real feature you're about to ship. Threat modeling abstract systems produces abstract output.
