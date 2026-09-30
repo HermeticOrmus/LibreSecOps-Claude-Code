@@ -7,12 +7,21 @@
 #   /plugin marketplace add HermeticOrmus/LibreSecOps-Claude-Code
 #   /plugin install <plugin>@libre-secops
 #
+# With --grok it installs through the Grok Build CLI (grok) instead, the same
+# as running:
+#   grok plugin marketplace add <this checkout>
+#   grok plugin install <plugin>@<checkout folder name> --trust
+# Grok registers a local folder as a marketplace under the folder's name.
+#
 # Usage:
 #   ./setup.sh                      install every plugin
 #   ./setup.sh --only p1,p2         install only the named plugins
 #   ./setup.sh --list               list the plugins in this pack
 #   ./setup.sh --scope project      install for this project only (user|project|local)
 #   ./setup.sh --uninstall          remove this pack's plugins and marketplace
+#   ./setup.sh --grok               use Grok Build (grok) instead of Claude Code;
+#                                   combines with --only, --list, --uninstall
+#                                   (--scope is Claude Code only)
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -21,6 +30,7 @@ ONLY=""
 LIST=0
 UNINSTALL=0
 SCOPE="user"
+GROK=0
 
 usage() { awk 'NR==1{next} /^#/{sub(/^# ?/,""); print; next} {exit}' "${BASH_SOURCE[0]}"; }
 
@@ -30,6 +40,7 @@ while [[ $# -gt 0 ]]; do
     --list) LIST=1; shift ;;
     --scope) SCOPE="${2:?--scope needs user, project, or local}"; shift 2 ;;
     --uninstall) UNINSTALL=1; shift ;;
+    --grok) GROK=1; shift ;;
     --plugins-dir)
       echo "note: --plugins-dir is no longer used; Claude Code manages plugin storage itself." >&2
       shift 2 ;;
@@ -38,7 +49,11 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-command -v claude >/dev/null 2>&1 || { echo "error: the Claude Code CLI (claude) is not on PATH. Install it first: https://docs.claude.com/en/docs/claude-code" >&2; exit 1; }
+if (( GROK )); then
+  command -v grok >/dev/null 2>&1 || { echo "error: the Grok Build CLI (grok) is not on PATH. Install it first: curl -fsSL https://x.ai/cli/install.sh | bash" >&2; exit 1; }
+else
+  command -v claude >/dev/null 2>&1 || { echo "error: the Claude Code CLI (claude) is not on PATH. Install it first: https://docs.claude.com/en/docs/claude-code" >&2; exit 1; }
+fi
 command -v jq >/dev/null 2>&1 || { echo "error: jq is required (sudo apt install jq / brew install jq)." >&2; exit 1; }
 
 MARKETPLACE="$(jq -r '.name' "$MANIFEST")"
@@ -55,6 +70,42 @@ if [[ -n "$ONLY" ]]; then
   for p in "${SELECTED[@]}"; do
     printf '%s\n' "${ALL[@]}" | grep -qx "$p" || { echo "error: '$p' is not a plugin in this pack (see --list)" >&2; exit 1; }
   done
+fi
+
+if (( GROK )); then
+  [[ "$SCOPE" == user ]] || echo "note: --scope applies to Claude Code only; Grok installs plugins for your user." >&2
+  GROK_MARKETPLACE="$(basename "$REPO_DIR")"
+  installed="$(grok plugin list --json 2>/dev/null | jq -r --arg mk "$GROK_MARKETPLACE" '.[] | select(.marketplace == $mk) | .name' 2>/dev/null || true)"
+  registered=0
+  grok plugin marketplace list 2>/dev/null | awk -v n="$GROK_MARKETPLACE:" '$1 == n { f = 1 } END { exit !f }' && registered=1
+
+  if (( UNINSTALL )); then
+    for p in "${SELECTED[@]}"; do
+      if grep -qx "$p" <<<"$installed"; then grok plugin uninstall "$p" --confirm; fi
+    done
+    if [[ -z "$ONLY" ]] && (( registered )); then grok plugin marketplace remove "$GROK_MARKETPLACE"; fi
+    echo "Removed. Start a new Grok session to unload the plugins."
+    exit 0
+  fi
+
+  if (( registered )); then
+    grok plugin marketplace update "$GROK_MARKETPLACE"
+  else
+    grok plugin marketplace add "$REPO_DIR"
+  fi
+
+  for p in "${SELECTED[@]}"; do
+    if grep -qx "$p" <<<"$installed"; then
+      grok plugin update "$p"
+    else
+      grok plugin install "$p@$GROK_MARKETPLACE" --trust
+    fi
+  done
+
+  echo
+  echo "Installed ${#SELECTED[@]} plugin(s) into Grok Build from $GROK_MARKETPLACE. Start a new Grok session (or press r in the Plugins tab) to load them."
+  echo "Tell us what worked and what is missing: https://github.com/HermeticOrmus/LibreSecOps-Claude-Code/issues/new?template=feedback.yml"
+  exit 0
 fi
 
 if (( UNINSTALL )); then
