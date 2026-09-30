@@ -1,0 +1,20 @@
+{
+  "name": "security-hardening",
+  "version": "1.0.0",
+  "description": "System hardening and CIS Benchmark assessment for Linux and Windows hosts, containers, Kubernetes, web servers, databases, and cloud accounts, with implementation and verification steps.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "security-hardening",
+    "cis-benchmarks",
+    "linux-hardening",
+    "container-hardening",
+    "kubernetes",
+    "configuration-audit"
+  ]
+}

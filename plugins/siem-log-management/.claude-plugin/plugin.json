@@ -1,0 +1,21 @@
+{
+  "name": "siem-log-management",
+  "version": "1.0.0",
+  "description": "SIEM and log management: SIEM architecture and log source planning, detection and hunting queries in Splunk SPL, Elastic KQL/EQL, and Sentinel KQL, and cross-source event correlation.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "siem",
+    "log-management",
+    "splunk",
+    "elastic",
+    "microsoft-sentinel",
+    "detection-engineering",
+    "sigma"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "container-security",
+  "version": "1.0.0",
+  "description": "Container security for Docker and Podman: Dockerfile and Compose hardening, image vulnerability scanning with SBOMs, and runtime isolation.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "container-security",
+    "docker",
+    "podman",
+    "dockerfile",
+    "image-scanning",
+    "sbom",
+    "seccomp"
+  ]
+}

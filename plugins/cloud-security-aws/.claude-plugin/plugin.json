@@ -1,0 +1,21 @@
+{
+  "name": "cloud-security-aws",
+  "version": "1.0.0",
+  "description": "Defensive AWS security: IAM, S3, VPC, KMS, and logging architecture reviews, CIS and Well-Architected compliance audits, and hardening patterns.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "aws",
+    "cloud-security",
+    "iam",
+    "s3",
+    "cis-benchmark",
+    "security-hub",
+    "kms"
+  ]
+}

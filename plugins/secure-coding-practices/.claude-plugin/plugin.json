@@ -1,0 +1,21 @@
+{
+  "name": "secure-coding-practices",
+  "version": "1.0.0",
+  "description": "Secure coding: security-focused code review, injection prevention, secure authentication and session patterns, and targeted vulnerability fixes.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "secure-coding",
+    "code-review",
+    "injection",
+    "xss",
+    "sqli",
+    "authentication",
+    "owasp"
+  ]
+}

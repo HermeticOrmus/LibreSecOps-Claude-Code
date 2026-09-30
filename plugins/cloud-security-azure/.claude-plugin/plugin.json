@@ -1,0 +1,21 @@
+{
+  "name": "cloud-security-azure",
+  "version": "1.0.0",
+  "description": "Defensive Azure security: Entra ID, Conditional Access, RBAC, networking, storage, and Key Vault reviews, plus CIS Azure and Microsoft Cloud Security Benchmark audits.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "azure",
+    "cloud-security",
+    "entra-id",
+    "conditional-access",
+    "defender-for-cloud",
+    "azure-policy",
+    "cis-benchmark"
+  ]
+}

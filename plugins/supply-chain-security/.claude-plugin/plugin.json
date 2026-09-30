@@ -1,0 +1,21 @@
+{
+  "name": "supply-chain-security",
+  "version": "1.0.0",
+  "description": "Software supply chain security: dependency vulnerability and license audits, SBOM generation, and detection of typosquatting, dependency confusion, and compromised packages.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "supply-chain-security",
+    "sbom",
+    "sca",
+    "dependencies",
+    "cyclonedx",
+    "spdx",
+    "sigstore"
+  ]
+}

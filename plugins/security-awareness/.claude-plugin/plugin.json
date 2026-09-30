@@ -1,0 +1,20 @@
+{
+  "name": "security-awareness",
+  "version": "1.0.0",
+  "description": "Security awareness training and policy: role-based training, authorized phishing simulations for an organization's own staff, and plain-language security policies mapped to regulations.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "security-awareness",
+    "security-training",
+    "phishing-simulation",
+    "security-policy",
+    "social-engineering",
+    "compliance"
+  ]
+}

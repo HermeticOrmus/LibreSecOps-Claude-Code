@@ -1,0 +1,22 @@
+{
+  "name": "compliance-frameworks",
+  "version": "1.0.0",
+  "description": "Compliance assessment, gap analysis, and audit evidence planning for SOC 2, ISO 27001, PCI DSS, HIPAA, GDPR, and NIST frameworks.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "compliance",
+    "soc2",
+    "iso27001",
+    "pci-dss",
+    "hipaa",
+    "gdpr",
+    "nist",
+    "audit"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "security-automation",
+  "version": "1.0.0",
+  "description": "Security orchestration, automation, and response (SOAR): platform selection, playbook design, and working automation for alert enrichment, phishing triage, and containment with human approval gates.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "soar",
+    "security-automation",
+    "playbooks",
+    "incident-response",
+    "alert-enrichment",
+    "soc"
+  ]
+}

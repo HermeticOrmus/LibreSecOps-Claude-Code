@@ -1,0 +1,21 @@
+{
+  "name": "devsecops-pipelines",
+  "version": "1.0.0",
+  "description": "Security-integrated CI/CD: pipeline security architecture, SAST, SCA, secrets, IaC, and container scanning in GitHub Actions, GitLab CI, and Jenkins, and build-breaking security gates.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "devsecops",
+    "ci-cd",
+    "sast",
+    "sca",
+    "security-gates",
+    "github-actions",
+    "gitlab-ci"
+  ]
+}

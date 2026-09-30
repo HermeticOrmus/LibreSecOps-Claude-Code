@@ -1,0 +1,21 @@
+{
+  "name": "bug-bounty-methodology",
+  "version": "1.0.0",
+  "description": "Methodology for authorized bug bounty programs: scope-respecting reconnaissance, attack surface mapping, and vulnerability reports that triagers can reproduce.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "bug-bounty",
+    "reconnaissance",
+    "responsible-disclosure",
+    "vulnerability-report",
+    "cvss",
+    "hackerone",
+    "bugcrowd"
+  ]
+}

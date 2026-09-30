@@ -1,0 +1,21 @@
+{
+  "name": "network-security",
+  "version": "1.0.0",
+  "description": "Network security: firewall rules, segmentation and trust zones, IDS/IPS with Suricata, Snort, and Zeek, VPN review, and network audits.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "network-security",
+    "firewall",
+    "segmentation",
+    "ids",
+    "ips",
+    "suricata",
+    "zeek"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "mobile-app-security",
+  "version": "1.0.0",
+  "description": "Mobile application security for Android and iOS: OWASP MASVS/MASTG assessments, secure code review, hardening checklists, and mobile crypto patterns.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "mobile-security",
+    "android",
+    "ios",
+    "owasp-masvs",
+    "mastg",
+    "app-hardening"
+  ]
+}

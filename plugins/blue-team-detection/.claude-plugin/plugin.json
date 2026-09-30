@@ -1,0 +1,21 @@
+{
+  "name": "blue-team-detection",
+  "version": "1.0.0",
+  "description": "Detection engineering and threat hunting: Sigma and YARA rules with SIEM translations, detection-as-code, and hypothesis-driven hunts mapped to MITRE ATT&CK.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "blue-team",
+    "detection-engineering",
+    "sigma",
+    "yara",
+    "threat-hunting",
+    "siem",
+    "mitre-attack"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "cryptography-essentials",
+  "version": "1.0.0",
+  "description": "Cryptography guidance: algorithm and parameter selection, password hashing, key management and rotation, TLS configuration, and crypto code audits.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "cryptography",
+    "encryption",
+    "tls",
+    "key-management",
+    "password-hashing",
+    "pki"
+  ]
+}

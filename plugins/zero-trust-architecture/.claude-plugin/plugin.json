@@ -1,0 +1,20 @@
+{
+  "name": "zero-trust-architecture",
+  "version": "1.0.0",
+  "description": "Zero trust architecture: NIST SP 800-207 design, CISA maturity assessments, and microsegmentation with network policies, service mesh authorization, and workload identity.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "zero-trust",
+    "nist-800-207",
+    "microsegmentation",
+    "ztna",
+    "service-mesh",
+    "workload-identity"
+  ]
+}

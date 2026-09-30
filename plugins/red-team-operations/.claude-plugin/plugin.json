@@ -1,0 +1,20 @@
+{
+  "name": "red-team-operations",
+  "version": "1.0.0",
+  "description": "Adversary simulation planning for authorized red and purple team engagements: rules of engagement, MITRE ATT&CK mapping, and detection validation.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "red-team",
+    "purple-team",
+    "mitre-attack",
+    "adversary-emulation",
+    "detection-validation",
+    "ttp"
+  ]
+}
