@@ -1,3 +1,8 @@
+---
+description: "Audit a Kubernetes cluster or its manifests (Helm charts, Kustomize overlays) across control plane, RBAC, workload security, network policy, and secrets and supply chain, aligned with the CIS Kubernetes Benchmark."
+argument-hint: "<cluster context or manifest path> [focus area]"
+---
+
 # /k8s-sec-audit
 
 > Structured audit of Kubernetes cluster security configuration.

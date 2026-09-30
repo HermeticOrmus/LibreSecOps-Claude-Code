@@ -1,3 +1,8 @@
+---
+description: "Generate a reconnaissance plan for an authorized bug bounty target: passive and active recon phases within the program's scope, tool suggestions, an attack surface map, and testing priorities."
+argument-hint: "<program name and platform> <in-scope assets> [out-of-scope rules]"
+---
+
 # /recon-plan
 
 > Generate a structured reconnaissance plan for an authorized bug bounty target, with passive and active recon phases, tool recommendations, and prioritized attack surface mapping.

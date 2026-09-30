@@ -1,3 +1,8 @@
+---
+name: "aws-iam-patterns"
+description: "AWS IAM reference: policy evaluation logic, policy types, least-privilege Lambda roles, permission boundaries, SCP guardrails, cross-account access with external ID, and IAM anti-patterns such as unconstrained PassRole. Use when writing or reviewing IAM policies."
+---
+
 # AWS IAM Patterns
 
 > Secure IAM policy patterns, least-privilege templates, and the policy evaluation logic that governs all AWS access control.

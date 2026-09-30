@@ -1,3 +1,8 @@
+---
+description: "Run a security-focused code review of the given files or snippet and report findings with vulnerable and fixed code side by side."
+argument-hint: "<files or code> [focus area]"
+---
+
 # /secure-review
 
 > Run a security-focused code review on provided code, identifying vulnerability patterns and producing findings with vulnerable and fixed code side by side.

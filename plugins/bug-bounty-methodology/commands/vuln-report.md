@@ -1,3 +1,8 @@
+---
+description: "Write a bug bounty vulnerability report for a confirmed finding: descriptive title, reproduction steps, HTTP evidence, proof of concept, impact, and remediation."
+argument-hint: "<vulnerability type> <affected asset> <description of the finding>"
+---
+
 # /vuln-report
 
 > Write a professional vulnerability report for bug bounty platform submission with clear reproduction steps, accurate severity assessment, and impact analysis.

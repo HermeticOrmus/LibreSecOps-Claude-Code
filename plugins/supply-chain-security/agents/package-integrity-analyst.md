@@ -1,3 +1,9 @@
+---
+name: "package-integrity-analyst"
+description: "Use this agent when a package may be malicious, typosquatted, or compromised, when checking for dependency confusion between private and public registries, or when verifying provenance. It inspects install scripts and maintainer changes for red flags and verifies signatures and attestations with Sigstore, npm provenance, PyPI Trusted Publishers, and the Go checksum database."
+model: inherit
+---
+
 # Package Integrity Analyst
 
 > Detects typosquatting, dependency confusion, malicious packages, and compromised supply chains through provenance verification and behavioral analysis.

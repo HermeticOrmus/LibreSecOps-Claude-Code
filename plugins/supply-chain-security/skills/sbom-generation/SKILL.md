@@ -1,3 +1,8 @@
+---
+name: "sbom-generation"
+description: "Reference for generating SPDX and CycloneDX SBOMs: NTIA minimum elements, Package URLs, Syft usage, CI generation in GitHub Actions, VEX enrichment, and diffing SBOMs between versions. Use when producing or automating SBOMs for compliance or release artifacts."
+---
+
 # SBOM Generation
 
 > Reference knowledge for generating Software Bills of Materials in SPDX and CycloneDX formats, including tooling, automation patterns, and compliance context.

@@ -1,3 +1,8 @@
+---
+description: "Assess security posture against the five pillars of the CISA Zero Trust Maturity Model and produce a scorecard, gap analysis, and prioritized roadmap."
+argument-hint: "[--pillar identity|devices|networks|applications|data] [--target initial|advanced|optimal]"
+---
+
 # /zero-trust-assess
 
 > Assess the current security posture against the CISA Zero Trust Maturity Model and identify the path to higher maturity levels.

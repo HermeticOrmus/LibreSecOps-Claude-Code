@@ -1,3 +1,8 @@
+---
+description: "Map the attack surface of a system you own or are authorized to assess: entry points, trust boundaries, data flows, and high-value targets, from code, configuration, and architecture."
+argument-hint: "<project path or system description> [external|internal|full]"
+---
+
 # /attack-surface
 
 > Map the attack surface of a system or application, identifying all entry points, trust boundaries, data flows, and high-value targets.

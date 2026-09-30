@@ -1,3 +1,8 @@
+---
+description: "Audit the current project's API endpoints against the OWASP API Security Top 10: discover endpoints, assess each category, and produce a findings report with remediation priority."
+argument-hint: "[rest|graphql|grpc|websocket] [spec file] [auth|authorization|injection|data-exposure|all]"
+---
+
 # /api-sec-audit
 
 > Audit API endpoints for security vulnerabilities against the OWASP API Security Top 10.

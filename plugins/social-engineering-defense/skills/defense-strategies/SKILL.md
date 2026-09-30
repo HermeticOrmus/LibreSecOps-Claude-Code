@@ -1,3 +1,8 @@
+---
+name: "defense-strategies"
+description: "Technical and human controls for preventing, detecting, and responding to social engineering across email, phone, SMS, and physical channels, including SPF, DKIM, DMARC, payment verification callbacks, dual authorization, and response procedures. Use when designing layered defenses or responding to a phishing or BEC incident."
+---
+
 # Defense Strategies
 
 > Technical and human defense controls for preventing, detecting, and responding to social engineering attacks across all channels.

@@ -1,3 +1,8 @@
+---
+name: "k8s-rbac-patterns"
+description: "Kubernetes RBAC reference: the Role and ClusterRole binding model, evaluation logic, escalation paths, least-privilege patterns for developers, CI/CD, monitoring, and break-glass access, plus common misconfigurations. Use when writing RBAC manifests or reviewing who can do what in a cluster."
+---
+
 # K8s RBAC Patterns
 
 > RBAC design patterns, least-privilege role definitions, common misconfigurations, and privilege escalation prevention.

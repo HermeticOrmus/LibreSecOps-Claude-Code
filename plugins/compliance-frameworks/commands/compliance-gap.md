@@ -1,3 +1,8 @@
+---
+description: "Identify gaps between current controls and a framework's requirements and produce a prioritized remediation roadmap, optionally mapped across multiple frameworks."
+argument-hint: "<framework> <description of current controls>"
+---
+
 # /compliance-gap
 
 > Identify specific compliance gaps between current state and framework requirements, with prioritized remediation roadmap.

@@ -1,3 +1,8 @@
+---
+description: "Define or adjust pipeline security gates that pass, warn, or fail builds based on findings, including differential gating and baselines."
+argument-hint: "<CI config file or platform> [--scanner sast|sca|dast|container|iac|secrets] [--strategy strict|balanced|permissive] [--baseline]"
+---
+
 # /security-gate
 
 > Define or modify quality gates that determine whether a build passes or fails based on security findings.

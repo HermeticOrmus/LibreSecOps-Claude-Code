@@ -1,3 +1,8 @@
+---
+description: "Generate a structured threat hunting hypothesis with ATT&CK mapping, required telemetry, analysis steps, true and false positive indicators, and a decision tree."
+argument-hint: "<tactic | technique | intel | detection gap> [--queries] [--playbook]"
+---
+
 # /hunt-hypothesis
 
 > Generate a structured threat hunting hypothesis with data sources, analysis approach, and expected indicators.

@@ -1,3 +1,8 @@
+---
+name: "zero-trust-principles"
+description: "NIST SP 800-207 reference: core tenets, logical components (policy decision and enforcement points), deployment models, the CISA maturity model, and patterns such as BeyondCorp-style access, conditional access, ZTNA replacing VPN, and SPIFFE workload identity. Use when designing or explaining a zero trust architecture."
+---
+
 # Zero Trust Principles
 
 > NIST SP 800-207 reference knowledge, core tenets, deployment models, and the theoretical foundation of zero trust architecture.

@@ -1,3 +1,8 @@
+---
+description: "Audit network configuration covering firewall rules, segmentation, exposed services, VPN or tunnel setup, and monitoring and IDS/IPS coverage."
+argument-hint: "<firewall ruleset, network diagram, or scope>"
+---
+
 # /network-audit
 
 > Structured audit of network configuration covering firewalls, segmentation, exposure, and monitoring.

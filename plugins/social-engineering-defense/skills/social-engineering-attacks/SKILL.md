@@ -1,3 +1,8 @@
+---
+name: "social-engineering-attacks"
+description: "Taxonomy of social engineering attack types with their psychological mechanisms, technical indicators, case studies, and detection patterns for phishing, BEC, and multi-channel attacks. Use when analyzing a suspected attack or explaining how one works so defenses can be designed."
+---
+
 # Social Engineering Attacks
 
 > Comprehensive taxonomy of social engineering attack types with psychological mechanisms, technical indicators, real-world case studies, and detection patterns.

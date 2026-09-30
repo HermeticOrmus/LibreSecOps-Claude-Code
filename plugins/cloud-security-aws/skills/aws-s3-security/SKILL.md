@@ -1,3 +1,8 @@
+---
+name: "aws-s3-security"
+description: "S3 security reference: access control layers, encryption models, a secure bucket baseline in Terraform, TLS-only bucket policies, access points, and anti-patterns such as public buckets and ACL reliance. Use when configuring or auditing S3 buckets."
+---
+
 # AWS S3 Security
 
 > S3 bucket security configurations, access control models, encryption patterns, and data exposure prevention.

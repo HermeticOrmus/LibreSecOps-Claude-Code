@@ -1,3 +1,8 @@
+---
+description: "Record a chain of custody entry for digital evidence (collection, transfer, analysis, storage, or disposal), with optional hash verification and formal legal format."
+argument-hint: "<evidence description> <action> <handler> [case ID] [--verify] [--legal]"
+---
+
 # /evidence-chain
 
 > Document a chain of custody record for collected digital evidence, ensuring integrity and admissibility.

@@ -1,3 +1,8 @@
+---
+name: "social-engineering-taxonomy"
+description: "Classification of social engineering attack types, the psychological principles they exploit, recognition cues, and verification habits such as callbacks and multi-channel checks. Use when building awareness training content or teaching staff to recognize manipulation attempts."
+---
+
 # Social Engineering Taxonomy
 
 > Classification of social engineering attack types, psychological principles exploited, recognition patterns, and organizational defense strategies.

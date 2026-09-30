@@ -1,3 +1,8 @@
+---
+name: "memory-forensics"
+description: "Memory forensics reference: acquisition tools (WinPMem, DumpIt, FTK Imager, LiME, AVML), Volatility 3 architecture, and triage patterns for processes, hidden processes, and injected code. Use when acquiring or analyzing a memory image during incident response."
+---
+
 # Memory Forensics
 
 > Volatility framework reference, process analysis, memory artifact types, and RAM analysis patterns for incident response.

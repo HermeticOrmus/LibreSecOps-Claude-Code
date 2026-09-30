@@ -1,3 +1,8 @@
+---
+name: "microsegmentation-patterns"
+description: "Implementation patterns for microsegmentation: default-deny Kubernetes NetworkPolicy, Cilium L7 and DNS-aware policies, Istio mTLS and authorization, tiered AWS security groups in Terraform, and PCI DSS cardholder data isolation. Use when writing segmentation policies for a cluster, service mesh, or cloud network."
+---
+
 # Microsegmentation Patterns
 
 > Implementation approaches for network, application, and identity-based microsegmentation across on-premises and cloud environments.

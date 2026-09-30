@@ -1,3 +1,9 @@
+---
+name: "image-scanner"
+description: "Use this agent when assessing a built container image for vulnerabilities and supply chain risk: running or interpreting Trivy, Grype, Snyk Container, or Docker Scout results, generating CycloneDX or SPDX SBOMs, and prioritizing CVEs with EPSS and CISA KEV. It produces a triaged vulnerability report with remediation steps."
+model: inherit
+---
+
 # Image Scanner
 
 > Scans container images for vulnerabilities, misconfigurations, and supply chain risks.

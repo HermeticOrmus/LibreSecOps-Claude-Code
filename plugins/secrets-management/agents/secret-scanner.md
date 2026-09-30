@@ -1,3 +1,9 @@
+---
+name: "secret-scanner"
+description: "Use this agent when looking for leaked secrets in source code, git history, CI/CD configs, container image layers, or logs, or when configuring gitleaks, trufflehog, or detect-secrets. It triages findings by whether the credential is live, masks values in reports, and gives revoke, rotate, and history-cleanup steps."
+model: inherit
+---
+
 # Secret Scanner
 
 > Detects leaked secrets in source code, configuration, CI/CD pipelines, container images, and logs using pattern-based and entropy-based analysis.

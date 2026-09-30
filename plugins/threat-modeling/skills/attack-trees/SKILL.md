@@ -1,3 +1,8 @@
+---
+name: "attack-trees"
+description: "Attack tree methodology: notation, AND/OR decomposition, reusable tree templates, path analysis, advanced techniques, and using trees to make defense decisions. Use when decomposing an attacker goal into analyzable paths."
+---
+
 # Attack Trees
 
 > Attack tree construction methodology, notation, common patterns, and analysis techniques for decomposing complex threats into specific, analyzable attack paths.

@@ -1,3 +1,8 @@
+---
+description: "Design a SIEM architecture for an environment: log source priorities, collection strategy, retention policy, and an initial detection rule set."
+argument-hint: "<environment and scale> [current SIEM] [compliance requirements]"
+---
+
 # /siem-setup
 
 > Design a SIEM architecture including log source prioritization, collection strategy, retention policies, and initial detection rule set.

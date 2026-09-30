@@ -1,3 +1,8 @@
+---
+description: "Map personal data flows through a system: collection points, processing activities, storage locations, third-party sharing, cross-border transfers, and retention, as input to GDPR Article 30 records or a DPIA."
+argument-hint: "<system name and architecture description>"
+---
+
 # /data-flow-map
 
 > Map personal data flows through a system, identifying collection points, processing activities, storage locations, sharing partners, and retention periods.

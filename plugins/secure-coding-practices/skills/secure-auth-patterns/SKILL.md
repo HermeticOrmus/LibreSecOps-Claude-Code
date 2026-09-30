@@ -1,3 +1,8 @@
+---
+name: "secure-auth-patterns"
+description: "Authentication and session implementation patterns: password hashing, session cookie settings, JWT validation and its pitfalls, and access control checks, with language-specific examples. Use when building or reviewing login, sessions, tokens, or authorization code."
+---
+
 # Secure Auth Patterns
 
 > Authentication, session management, and access control implementation patterns with language-specific secure code examples.

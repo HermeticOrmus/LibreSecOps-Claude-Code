@@ -1,3 +1,8 @@
+---
+description: "Produce a structured threat model for the described system or feature: scope, data flows, STRIDE threats ranked by DREAD, mitigations, accepted risks, and open questions."
+argument-hint: "<system or feature to model>"
+---
+
 # Threat model construction
 
 You are a threat-modeler agent. Produce a structured threat model for the system or feature described.

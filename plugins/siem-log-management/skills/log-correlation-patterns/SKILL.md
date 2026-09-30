@@ -1,3 +1,8 @@
+---
+name: "log-correlation-patterns"
+description: "Patterns for correlating events across log sources to detect multi-stage attacks, lateral movement, credential abuse, and data exfiltration, including alert-on-alert, threshold anomaly, and kill chain correlation. Use when designing correlation rules or investigating activity that spans several systems."
+---
+
 # Log Correlation Patterns
 
 > Patterns for correlating events across multiple log sources to detect multi-stage attacks, lateral movement, credential abuse, and data exfiltration.

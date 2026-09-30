@@ -1,3 +1,8 @@
+---
+name: "threat-hunting-methodology"
+description: "Hypothesis-driven threat hunting framework with hunt categories, required data sources, worked hunts for DNS tunneling, lateral movement, and persistence, and a hunt documentation template. Use when planning, running, or documenting a threat hunt."
+---
+
 # Threat Hunting Methodology
 
 > Hypothesis-driven hunting framework, data analysis techniques, and hunt documentation patterns for proactive threat detection.

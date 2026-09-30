@@ -1,3 +1,8 @@
+---
+description: "Assess a platform's configuration against its CIS Benchmark and produce a compliance score, critical gaps, and a remediation plan."
+argument-hint: "<target, e.g. ubuntu-22.04|docker|kubernetes|aws|nginx> [level-1|level-2]"
+---
+
 # /benchmark
 
 > Assess configuration against CIS Benchmark requirements and produce a compliance report.

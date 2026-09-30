@@ -1,3 +1,8 @@
+---
+name: "owasp-top-10"
+description: "Knowledge base for all ten OWASP Top 10 (2021) categories with vulnerable and fixed code examples, detection techniques, universal defense patterns, and framework security checklists. Use when reviewing web code for a specific vulnerability class or explaining an OWASP category and its fix."
+---
+
 # OWASP Top 10 (2021)
 
 > Comprehensive knowledge base covering all ten OWASP categories with vulnerability patterns, detection techniques, code examples, and framework-specific mitigations.

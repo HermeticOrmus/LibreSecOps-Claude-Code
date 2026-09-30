@@ -1,3 +1,8 @@
+---
+description: "Design a complete security awareness program with phased rollout, role-based content, a simulation calendar, and measurable outcomes."
+argument-hint: "<organization profile> [current state] [regulatory requirements]"
+---
+
 # /awareness-plan
 
 > Design a complete security awareness training program with phased implementation, role-based content, simulation calendar, and measurable outcomes.

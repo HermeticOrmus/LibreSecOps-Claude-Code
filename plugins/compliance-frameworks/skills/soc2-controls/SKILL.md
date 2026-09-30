@@ -1,3 +1,8 @@
+---
+name: "soc2-controls"
+description: "SOC 2 Type II reference: the Trust Service Criteria, Common Criteria controls, evidence requirements, a readiness pattern, and common auditor requests. Use when preparing for a SOC 2 audit or designing controls to satisfy it."
+---
+
 # SOC 2 Controls
 
 > SOC 2 Type II Trust Service Criteria reference covering Security, Availability, Processing Integrity, Confidentiality, and Privacy with common controls and evidence requirements.

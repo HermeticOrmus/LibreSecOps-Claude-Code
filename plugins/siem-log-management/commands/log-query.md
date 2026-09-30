@@ -1,3 +1,8 @@
+---
+description: "Build a detection, investigation, or threat hunting query for a threat or scenario in Splunk SPL, Elastic KQL/EQL, Microsoft Sentinel KQL, or Sigma, with tuning notes for false positives."
+argument-hint: "<ATT&CK technique, attack pattern, or scenario> [splunk|elastic|sentinel|sigma]"
+---
+
 # /log-query
 
 > Build a detection or investigation query for a specific threat or scenario, with syntax for Splunk SPL, Elastic KQL, or Microsoft Sentinel KQL.

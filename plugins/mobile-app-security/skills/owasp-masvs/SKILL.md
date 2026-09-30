@@ -1,3 +1,8 @@
+---
+name: "owasp-masvs"
+description: "OWASP MASVS v2.0 reference covering every control group (storage, crypto, auth, network, platform, code, resilience) and how each maps to MASTG test cases. Use when scoping, testing, or reporting against the mobile verification standard."
+---
+
 # OWASP MASVS
 
 > Complete reference for the OWASP Mobile Application Security Verification Standard (MASVS) v2.0 and its relationship to the Mobile Application Security Testing Guide (MASTG).

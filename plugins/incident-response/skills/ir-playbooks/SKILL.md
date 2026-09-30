@@ -1,3 +1,8 @@
+---
+name: "ir-playbooks"
+description: "Step-by-step incident response playbooks (indicators, validation, containment, eradication and recovery, post-incident) for malware infection, account compromise, data breach, ransomware, DDoS, and insider threat. Use when responding to one of these incidents or writing its runbook."
+---
+
 # Incident Response Playbooks
 
 > Playbook templates for common security incident types, providing step-by-step response procedures for each phase of incident handling.

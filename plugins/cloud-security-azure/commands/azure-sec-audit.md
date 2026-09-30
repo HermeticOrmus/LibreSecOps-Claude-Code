@@ -1,3 +1,8 @@
+---
+description: "Run a structured security audit of an Azure subscription or tenant (live az CLI access, Terraform, ARM, or Bicep) covering Entra ID, RBAC, networking, storage, Key Vault, and logging, with findings by severity."
+argument-hint: "[live | path to IaC | config export] [focus area]"
+---
+
 # /azure-sec-audit
 
 > Structured security audit of Azure configuration covering Entra ID, NSGs, storage accounts, Activity Logs, and Azure Policy.

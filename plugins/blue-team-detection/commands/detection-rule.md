@@ -1,3 +1,8 @@
+---
+description: "Create a Sigma detection rule for an ATT&CK technique, behavior description, or log sample, with optional SIEM translation, YARA rule, Atomic Red Team test, and tuning guide."
+argument-hint: "<ATT&CK ID | behavior | log sample> [--siem splunk|elastic|sentinel|qradar] [--yara] [--test]"
+---
+
 # /detection-rule
 
 > Create a detection rule for a specific ATT&CK technique or threat behavior, in Sigma format with SIEM-specific translations.

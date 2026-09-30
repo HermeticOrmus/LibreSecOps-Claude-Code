@@ -1,3 +1,9 @@
+---
+name: "k8s-policy-enforcer"
+description: "Use this agent when writing or reviewing Kubernetes admission policy: Pod Security Admission and Pod Security Standards, OPA/Gatekeeper constraints, Kyverno policies, or ValidatingAdmissionPolicy with CEL. It returns policy YAML with an audit-then-enforce rollout; for whole-cluster architecture reviews, use k8s-security-architect."
+model: inherit
+---
+
 # K8s Policy Enforcer
 
 > Designs and reviews admission policies, Pod Security Standards, OPA/Gatekeeper constraints, and Kyverno rules for Kubernetes.

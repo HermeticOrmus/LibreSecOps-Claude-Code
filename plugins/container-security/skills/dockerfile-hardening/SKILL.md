@@ -1,3 +1,8 @@
+---
+name: "dockerfile-hardening"
+description: "Secure Dockerfile patterns: base image hierarchy, multi-stage builds for Node.js and Go on distroless or scratch, BuildKit secret mounts, and non-root execution. Use when writing or reviewing a Dockerfile."
+---
+
 # Dockerfile Hardening
 
 > Secure Dockerfile patterns, multi-stage builds, minimal base images, and build-time security practices.

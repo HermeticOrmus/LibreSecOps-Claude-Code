@@ -1,3 +1,8 @@
+---
+description: "Generate a security policy document tailored to the organization, its audience, and applicable regulations, with roles, enforcement, exceptions, and a regulatory mapping."
+argument-hint: "<policy type> [organization context] [regulations]"
+---
+
 # /security-policy
 
 > Generate a security policy document tailored to organizational context, regulatory requirements, and workforce profile.

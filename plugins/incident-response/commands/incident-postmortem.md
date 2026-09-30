@@ -1,3 +1,8 @@
+---
+description: "Generate a blameless post-incident review from the incident timeline, actions taken, and outcomes: response metrics, root cause and contributing factors, what went well, improvements, and owned action items."
+argument-hint: "<incident summary and timeline>"
+---
+
 # /incident-postmortem
 
 > Generate a structured blameless post-incident review from incident timeline, actions taken, and outcomes.

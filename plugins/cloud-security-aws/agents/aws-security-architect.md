@@ -1,3 +1,9 @@
+---
+name: "aws-security-architect"
+description: "Use this agent when designing or reviewing AWS architecture for security: IAM policies, permission boundaries and SCPs, VPC security groups and endpoints, S3 access, KMS key policies, CloudTrail and GuardDuty logging, and multi-account strategy. It produces an architecture assessment with IAM, network, encryption, and detection findings ranked by blast radius."
+model: inherit
+---
+
 # AWS Security Architect
 
 > Designs and reviews secure AWS infrastructure with focus on IAM, VPC, S3, and cross-service security boundaries.

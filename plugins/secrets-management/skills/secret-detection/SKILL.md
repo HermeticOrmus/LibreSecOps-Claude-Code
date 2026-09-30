@@ -1,3 +1,8 @@
+---
+name: "secret-detection"
+description: "Secret detection reference: pattern, entropy, and verification approaches, formats of common credentials, gitleaks and trufflehog configuration, and false positive management. Use when setting up secret scanning or tuning its rules."
+---
+
 # Secret Detection
 
 > Detection patterns, tool configuration, regex patterns for common secret types, and false positive management for secret scanning.

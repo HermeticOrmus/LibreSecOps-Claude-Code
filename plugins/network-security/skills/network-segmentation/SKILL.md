@@ -1,3 +1,8 @@
+---
+name: "network-segmentation"
+description: "Network segmentation strategies: trust zones, VLAN and DMZ design, micro-segmentation, and lateral movement prevention. Use when designing segmentation or assessing how far a compromise could spread inside a network."
+---
+
 # Network Segmentation
 
 > Segmentation strategies, trust zone design, micro-segmentation, and lateral movement prevention.

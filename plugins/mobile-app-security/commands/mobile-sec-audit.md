@@ -1,3 +1,8 @@
+---
+description: "Audit a mobile application against the OWASP MASVS categories and produce prioritized findings with platform-specific remediation."
+argument-hint: "<android|ios|cross-platform> <app description or source path>"
+---
+
 # /mobile-sec-audit
 
 > Structured security audit of a mobile application against OWASP MASVS categories, producing prioritized findings with platform-specific remediation.

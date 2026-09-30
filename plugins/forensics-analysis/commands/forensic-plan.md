@@ -1,3 +1,8 @@
+---
+description: "Create a forensic investigation plan for an authorized incident: evidence sources, order-of-volatility collection priorities, and analysis approach."
+argument-hint: "<incident description> <who authorized it> [--live] [--legal]"
+---
+
 # /forensic-plan
 
 > Create a forensic investigation plan tailored to the incident type, defining evidence sources, collection priorities, and analysis approach.

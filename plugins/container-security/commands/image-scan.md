@@ -1,3 +1,8 @@
+---
+description: "Scan a container image, tarball, or existing scanner report for vulnerabilities and misconfigurations, produce an SBOM, and prioritize the fixes."
+argument-hint: "<image:tag | image@sha256:digest | tarball | scan report>"
+---
+
 # /image-scan
 
 > Scan container images for vulnerabilities and misconfigurations.

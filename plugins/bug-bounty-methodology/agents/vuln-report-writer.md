@@ -1,3 +1,9 @@
+---
+name: "vuln-report-writer"
+description: "Use this agent when you have a confirmed finding from an authorized program and need to write or improve the submission report. It produces a clear title, CVSS v3.1 vector, CWE classification, reproduction steps a triager can follow, HTTP evidence, business impact, and remediation, formatted for HackerOne, Bugcrowd, or Intigriti."
+model: inherit
+---
+
 # Vuln Report Writer
 
 > Professional vulnerability report writer producing clear, reproducible, impact-focused reports for bug bounty platform submission.

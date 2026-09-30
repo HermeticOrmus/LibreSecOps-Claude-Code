@@ -1,3 +1,8 @@
+---
+name: "ci-security-patterns"
+description: "Reference pipelines for security scanning in GitHub Actions, GitLab CI, and Jenkins, plus pre-commit hooks, with stage ordering and design decisions. Use when adding or reviewing security stages in CI."
+---
+
 # CI Security Patterns
 
 > Reference patterns for integrating security scanning into GitHub Actions, GitLab CI, and Jenkins pipelines with real workflow syntax and production-ready configurations.

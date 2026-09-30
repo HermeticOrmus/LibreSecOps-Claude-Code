@@ -1,3 +1,8 @@
+---
+name: "vuln-report-writing"
+description: "Guide to vulnerability reports that get accepted and triaged: title writing, CVSS v3.1 scoring, reproduction steps, impact writing, the report lifecycle, chaining, evidence, and minimal PoC scripts. Use when drafting or reviewing a bug bounty or disclosure report."
+---
+
 # Vuln Report Writing
 
 > Guide to writing vulnerability reports that get accepted, triaged quickly, and rewarded fairly, with templates, CVSS guidance, and common pitfalls.

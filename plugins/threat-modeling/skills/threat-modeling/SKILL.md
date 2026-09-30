@@ -1,3 +1,8 @@
+---
+name: "threat-modeling"
+description: "Checklist-level threat modeling reference: STRIDE and DREAD summaries, a trust boundary checklist, common STRIDE threats per component, frequent MITRE ATT&CK techniques, example attack trees for tenant data theft and account takeover, and a catalog of common threat modeling mistakes. Use when you need a compact checklist while building or reviewing a threat model."
+---
+
 # Threat modeling pattern library
 
 ## STRIDE quick reference

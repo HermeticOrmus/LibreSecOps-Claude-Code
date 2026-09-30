@@ -1,3 +1,8 @@
+---
+name: "mobile-crypto-patterns"
+description: "Mobile cryptography patterns for Android Keystore and iOS Secure Enclave, Keychain, and CryptoKit: key storage, data-at-rest encryption, password key derivation, TLS and certificate pinning, and secure randomness. Use when implementing or reviewing crypto in a mobile app."
+---
+
 # Mobile Crypto Patterns
 
 > Secure cryptographic implementation patterns for Android and iOS, covering key storage, data-at-rest encryption, transport security, and common mobile crypto pitfalls.

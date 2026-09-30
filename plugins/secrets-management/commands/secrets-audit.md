@@ -1,3 +1,8 @@
+---
+description: "Scan a project for hardcoded secrets, exposed credentials, and secret-handling anti-patterns across code, config, CI/CD, and container files, optionally including git history."
+argument-hint: "[--history] [--verify] [--fix]"
+---
+
 # /secrets-audit
 
 > Scan a project for hardcoded secrets, exposed credentials, and secret management anti-patterns.

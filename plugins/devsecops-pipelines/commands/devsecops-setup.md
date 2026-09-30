@@ -1,3 +1,8 @@
+---
+description: "Detect the project's CI/CD platform and stack, then add security scanning stages (SAST, SCA, secrets, IaC, container) at the chosen coverage level."
+argument-hint: "[--platform github|gitlab|jenkins] [--level minimal|standard|comprehensive]"
+---
+
 # /devsecops-setup
 
 > Configure security scanning in an existing CI/CD pipeline, detecting the platform and adding appropriate security stages.

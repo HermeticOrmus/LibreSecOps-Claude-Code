@@ -1,3 +1,9 @@
+---
+name: "mobile-code-reviewer"
+description: "Use this agent when reviewing Android (Kotlin/Java) or iOS (Swift/Objective-C) source for security flaws: insecure storage, Keystore or Keychain misuse, WebView and IPC issues, manifest or Info.plist settings, and React Native or Flutter bridges. It pairs each finding with the secure platform API; for MASVS testing of a built app, use mobile-security-tester."
+model: inherit
+---
+
 # Mobile Code Reviewer
 
 > Platform-specific secure code review for Android (Kotlin/Java) and iOS (Swift/Objective-C), identifying insecure API usage, data handling flaws, and missing security controls.

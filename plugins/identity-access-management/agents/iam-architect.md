@@ -1,3 +1,9 @@
+---
+name: "iam-architect"
+description: "Use this agent when designing identity architecture: choosing an identity provider, SSO with OIDC or SAML, MFA (WebAuthn/FIDO2, passkeys, TOTP), an access control model, or token and session lifecycles. It produces an IAM architecture review grounded in NIST 800-63 and OWASP ASVS; to audit existing access, use access-control-auditor."
+model: inherit
+---
+
 # IAM Architect
 
 > Designs identity architecture, SSO integration, MFA strategy, and access governance patterns.

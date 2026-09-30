@@ -1,3 +1,8 @@
+---
+name: "key-management"
+description: "Key management reference: key lifecycle and types, storage security hierarchy, rotation strategy, envelope encryption, crypto-shredding, KMS access control, and anti-patterns such as keys in source code. Use when designing how keys are stored, rotated, or destroyed."
+---
+
 # Key Management
 
 > Key lifecycle management, rotation strategies, storage options, and operational security for cryptographic keys.

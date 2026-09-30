@@ -1,3 +1,8 @@
+---
+name: "detection-engineering"
+description: "Detection engineering reference: the detection lifecycle and quality metrics, Sigma rule syntax and modifiers, YARA rule writing, a detection-as-code CI pipeline, and essential Windows detections. Use when writing, testing, or maintaining detection rules."
+---
+
 # Detection Engineering
 
 > Sigma rule syntax, YARA rule writing, detection-as-code workflows, and the methodology of building reliable, maintainable detection rules.

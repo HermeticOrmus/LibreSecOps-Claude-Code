@@ -1,3 +1,8 @@
+---
+name: "data-protection-patterns"
+description: "Technical patterns for anonymization, pseudonymization, field-level encryption, data minimization, consent management, and data subject request automation, with the difference between anonymous and pseudonymous data. Use when implementing privacy controls in code or data pipelines."
+---
+
 # Data Protection Patterns
 
 > Technical patterns for anonymization, pseudonymization, encryption, data minimization, and consent management in software systems.

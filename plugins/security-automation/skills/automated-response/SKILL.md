@@ -1,3 +1,8 @@
+---
+name: "automated-response"
+description: "Automated remediation and containment patterns (endpoint isolation, IOC blocking with allowlists and expiry, alert correlation, threat intelligence feed updates) and a framework for deciding when an action can run automatically and when it needs human approval. Use when designing response playbooks or containment automation."
+---
+
 # Automated Response
 
 > Automated remediation patterns, containment actions, and the decision framework for when to automate versus when to require human approval.

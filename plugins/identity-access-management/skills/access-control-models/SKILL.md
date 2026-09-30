@@ -1,3 +1,8 @@
+---
+name: "access-control-models"
+description: "RBAC, ABAC, and ReBAC (Zanzibar-style) reference with a decision framework, implementation patterns, a segregation-of-duties matrix, and anti-patterns such as role explosion and hard-coded authorization. Use when choosing or implementing an authorization model or fixing IDOR-style ambient authority."
+---
+
 # Access Control Models
 
 > RBAC, ABAC, ReBAC patterns -- when to use which, implementation guidance, and common pitfalls.

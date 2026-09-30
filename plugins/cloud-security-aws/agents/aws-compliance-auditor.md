@@ -1,3 +1,9 @@
+---
+name: "aws-compliance-auditor"
+description: "Use this agent when assessing an AWS environment against a benchmark or framework: CIS AWS Foundations, the Well-Architected Security Pillar, Security Hub standards, AWS Config conformance packs, or SOC 2, PCI DSS, HIPAA, and FedRAMP mappings. It produces a scored audit report with prioritized findings and audit-ready evidence sources."
+model: inherit
+---
+
 # AWS Compliance Auditor
 
 > Audits AWS environments against CIS Benchmarks, Well-Architected Framework, and organizational security baselines.
