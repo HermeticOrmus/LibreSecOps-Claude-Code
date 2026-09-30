@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1] - 2026-09-30
+
+### Fixed
+
+- `./setup.sh --help` printed the first line of code after the usage text; it now prints only the usage.
+- `./setup.sh --uninstall` reported a failure for every plugin that was never installed; it now skips those and removes only what is installed.
+
 ## [1.0.0] - 2026-09-30
 
 LibreSecOps is now a Claude Code plugin marketplace. Every plugin installs with `/plugin install`, and every agent, command, and skill tells Claude when it applies, so the right specialist gets picked from what you ask.
