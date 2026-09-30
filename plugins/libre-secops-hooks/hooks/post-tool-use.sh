@@ -1,678 +1,464 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # =============================================================================
-# LibreSecOps Post Tool Use Hook
+# LibreSecOps PostToolUse hook
 # =============================================================================
-# Runs AFTER Edit/Write/MultiEdit operations.
-# Scans written/edited code for common security vulnerabilities using
-# pattern matching. No network calls - purely local regex scanning.
+# Runs after Edit, Write, and MultiEdit.
 #
-# What this hook does:
-# 1. Scans for SQL injection patterns
-# 2. Detects XSS vulnerabilities (innerHTML, dangerouslySetInnerHTML)
-# 3. Finds hardcoded secrets (API keys, passwords, tokens)
-# 4. Identifies insecure cryptography (MD5, SHA1 for passwords)
-# 5. Detects command injection risks (exec, system, eval)
-# 6. Checks for path traversal patterns
-# 7. Flags CORS misconfigurations
-# 8. Identifies missing input validation
-# 9. Detects insecure deserialization
-# 10. Checks for missing rate limiting on auth endpoints
+# Claude Code sends the hook input as JSON on stdin; this hook reads
+# tool_name, tool_input.file_path, and cwd with jq, then scans the edited file
+# with local pattern matching (no network calls, no files written):
+#
+#  1. SQL injection (string building in queries, raw query APIs)
+#  2. XSS sinks (innerHTML, dangerouslySetInnerHTML, v-html, {@html}, ...)
+#  3. Hardcoded secrets (API keys, AWS keys, tokens, private keys, DSNs)
+#  4. Insecure cryptography (MD5/SHA1 for passwords, weak TLS, ECB, weak RNG)
+#  5. Command injection (eval, child_process, os.system, shell=True, ...)
+#  6. Path traversal (file access built from request input)
+#  7. CORS misconfiguration (wildcards, origin reflection, credentials)
+#  8. Missing input validation on request data
+#  9. Insecure deserialization (pickle, yaml.load, unserialize, ...)
+# 10. Auth endpoints without visible rate limiting
+# 11. Dockerfile issues (root user, unpinned images, copied secrets)
+#
+# It also adds a short checklist for security-sensitive file types (auth,
+# database, API routes, CORS and header config, containers, Kubernetes,
+# Terraform, CI/CD), which the PreToolUse hook used to print before the edit.
+#
+# Output: only when there is something to say, a JSON object with
+# hookSpecificOutput.additionalContext for Claude, plus a one-line
+# systemMessage for the person when a finding is CRITICAL. Pattern matching
+# gives false positives; treat findings as prompts to look, not verdicts.
 # =============================================================================
 
 set -euo pipefail
+IFS=$'\n\t'
 
-# Read hook input from stdin (contains tool info as JSON)
-HOOK_INPUT=$(cat)
+command -v jq >/dev/null 2>&1 || exit 0
 
-# Extract tool name and file path from hook input
-TOOL_NAME=$(echo "$HOOK_INPUT" | grep -oP '"tool_name"\s*:\s*"\K[^"]+' 2>/dev/null || echo "")
-FILE_PATH=$(echo "$HOOK_INPUT" | grep -oP '"file_path"\s*:\s*"\K[^"]+' 2>/dev/null || echo "")
+INPUT="$(cat)"
+TOOL_NAME="$(jq -r '.tool_name // empty' <<<"$INPUT" 2>/dev/null || true)"
+FILE_PATH="$(jq -r '.tool_input.file_path // empty' <<<"$INPUT" 2>/dev/null || true)"
+CWD="$(jq -r '.cwd // empty' <<<"$INPUT" 2>/dev/null || true)"
+CWD="${CWD:-$PWD}"
 
-# Alternative extraction if grep -P not available
-if [ -z "$TOOL_NAME" ]; then
-    TOOL_NAME=$(echo "$HOOK_INPUT" | grep -o '"tool_name":"[^"]*"' | cut -d'"' -f4 2>/dev/null || echo "")
-fi
-if [ -z "$FILE_PATH" ]; then
-    FILE_PATH=$(echo "$HOOK_INPUT" | grep -o '"file_path":"[^"]*"' | cut -d'"' -f4 2>/dev/null || echo "")
-fi
+case "$TOOL_NAME" in
+  Edit|Write|MultiEdit) ;;
+  *) exit 0 ;;
+esac
+[[ -n "$FILE_PATH" && -f "$FILE_PATH" ]] || exit 0
 
-# Exit early if not a file modification tool or no file path
-if [ "$TOOL_NAME" != "Edit" ] && [ "$TOOL_NAME" != "Write" ] && [ "$TOOL_NAME" != "MultiEdit" ]; then
-    exit 0
-fi
+FILE_NAME="$(basename "$FILE_PATH")"
+FILE_DIR="$(dirname "$FILE_PATH")"
+FILE_NAME_LOWER="$(tr '[:upper:]' '[:lower:]' <<<"$FILE_NAME")"
+FILE_PATH_LOWER="$(tr '[:upper:]' '[:lower:]' <<<"$FILE_PATH")"
+FILE_EXT=""
+[[ "$FILE_NAME" == *.* ]] && FILE_EXT="$(tr '[:upper:]' '[:lower:]' <<<"${FILE_NAME##*.}")"
+REL_PATH="${FILE_PATH#"$CWD"/}"
 
-if [ -z "$FILE_PATH" ] || [ ! -f "$FILE_PATH" ]; then
-    exit 0
-fi
+# Skip binary and media files.
+case "$FILE_EXT" in
+  png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|eot|mp4|mp3|pdf|zip|tar|gz|tgz|jar|so|dylib|dll|exe|bin) exit 0 ;;
+esac
 
-# Setup logging
-HOOKS_LOG_DIR="${LIBRESECOPS_HOOKS_DIR:-$(dirname "$0")}/logs"
-mkdir -p "$HOOKS_LOG_DIR"
+# Read at most 100 KB so the scan stays fast on large files.
+CONTENT="$(head -c 102400 "$FILE_PATH" 2>/dev/null || true)"
+[[ -n "$CONTENT" ]] || exit 0
 
-# Get file info
-FILE_EXT="${FILE_PATH##*.}"
-FILE_NAME=$(basename "$FILE_PATH")
-FILE_NAME_LOWER=$(echo "$FILE_NAME" | tr '[:upper:]' '[:lower:]')
+IS_CODE=false
+IS_TEMPLATE=false
+IS_CONFIG=false
+case "$FILE_EXT" in
+  js|ts|jsx|tsx|mjs|cjs|py|go|rb|java|kt|scala|rs|php|sql|prisma|vue|svelte) IS_CODE=true ;;
+  html|htm|ejs|hbs|handlebars|pug|jade|njk|jinja|j2|twig) IS_TEMPLATE=true ;;
+  yaml|yml|json|toml|ini|conf|cfg|properties|tf|tfvars|env) IS_CONFIG=true ;;
+esac
+[[ "$FILE_NAME_LOWER" =~ ^dockerfile || "$FILE_NAME_LOWER" =~ \.dockerfile$ ]] && IS_CONFIG=true
+[[ "$FILE_NAME_LOWER" =~ ^\.env ]] && IS_CONFIG=true
 
-# Initialize findings arrays
 CRITICAL=()
 HIGH=()
 MEDIUM=()
 LOW=()
-SUGGESTIONS=()
+NOTES=()
 
-# Read file content (limit to 100KB to stay fast)
-FILE_SIZE=$(stat -c%s "$FILE_PATH" 2>/dev/null || echo "0")
-if [ "$FILE_SIZE" -gt 102400 ]; then
-    FILE_CONTENT=$(head -c 102400 "$FILE_PATH")
-else
-    FILE_CONTENT=$(cat "$FILE_PATH")
-fi
+# Arrays are expanded as ${arr[@]+"${arr[@]}"} where they may be empty, so
+# the scripts also run under bash 3.2 (the macOS default) with set -u.
 
-# Determine file type category for targeted scanning
-IS_CODE=false
-IS_CONFIG=false
-IS_TEMPLATE=false
+# Matching helpers. Here-strings instead of pipes from echo, so an early exit
+# from grep -q cannot turn a match into a SIGPIPE failure under pipefail.
+has()   { grep -qE  -- "$1" <<<"$CONTENT"; }
+hasi()  { grep -qiE -- "$1" <<<"$CONTENT"; }
+# Some line matches $1 and that same line does not match $2.
+has_not() {
+  local m
+  m="$(grep -E -- "$1" <<<"$CONTENT" || true)"
+  [[ -n "$m" ]] && grep -qvE -- "$2" <<<"$m"
+}
+hasi_not() {
+  local m
+  m="$(grep -iE -- "$1" <<<"$CONTENT" || true)"
+  [[ -n "$m" ]] && grep -qviE -- "$2" <<<"$m"
+}
+# Some line matches $1 and that same line also matches $2 (case-insensitive).
+has_with() {
+  local m
+  m="$(grep -E -- "$1" <<<"$CONTENT" || true)"
+  [[ -n "$m" ]] && grep -qiE -- "$2" <<<"$m"
+}
 
-case "$FILE_EXT" in
-    js|ts|jsx|tsx|mjs|cjs)
-        IS_CODE=true
-        ;;
-    py)
-        IS_CODE=true
-        ;;
-    go)
-        IS_CODE=true
-        ;;
-    rb)
-        IS_CODE=true
-        ;;
-    java|kt|scala)
-        IS_CODE=true
-        ;;
-    rs)
-        IS_CODE=true
-        ;;
-    php)
-        IS_CODE=true
-        ;;
-    html|htm|ejs|hbs|handlebars|pug|jade|njk|jinja|j2|twig)
-        IS_TEMPLATE=true
-        ;;
-    yaml|yml|json|toml|ini|conf|cfg)
-        IS_CONFIG=true
-        ;;
-    env|env.*|properties)
-        IS_CONFIG=true
-        ;;
-    sql|prisma)
-        IS_CODE=true
-        ;;
-    tf|tfvars)
-        IS_CONFIG=true
-        ;;
-    dockerfile|Dockerfile)
-        IS_CONFIG=true
-        ;;
-esac
-
-# Also check for Dockerfile by name
-if echo "$FILE_NAME_LOWER" | grep -qE "^dockerfile"; then
-    IS_CONFIG=true
-fi
-
-# Skip binary/image files
-if echo "$FILE_EXT" | grep -qiE "^(png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|mp4|mp3|pdf|zip|tar|gz)$"; then
-    exit 0
-fi
+ENV_READS='process\.env|os\.environ|os\.getenv|getenv\(|env\(|env\[|ENV\['
+PLACEHOLDERS='example|placeholder|your[_-]|xxx|changeme|todo|replace|dummy|fake|<[a-z_-]+>'
 
 # =============================================================================
-# SQL INJECTION DETECTION
+# 1. SQL injection
 # =============================================================================
-
 check_sql_injection() {
-    local content="$1"
-
-    # String concatenation in SQL queries (JavaScript/TypeScript)
-    if echo "$content" | grep -E "(\"|')SELECT\s.*\+|(\"|')INSERT\s.*\+|(\"|')UPDATE\s.*\+|(\"|')DELETE\s.*\+" 2>/dev/null | grep -qvE "//|/\*|\*/" 2>/dev/null; then
-        HIGH+=("SQL Injection: String concatenation detected in SQL query - use parameterized queries instead")
-    fi
-
-    # Template literals with variables in SQL (JS/TS)
-    if echo "$content" | grep -E '\`(SELECT|INSERT|UPDATE|DELETE)\s[^`]*\$\{' 2>/dev/null | grep -qvE "//|/\*|\*/" 2>/dev/null; then
-        HIGH+=("SQL Injection: Template literal interpolation in SQL query - use parameterized queries (\$1, ?, :param)")
-    fi
-
-    # Python f-string or format in SQL
-    if echo "$content" | grep -E 'f"(SELECT|INSERT|UPDATE|DELETE)\s|f'"'"'(SELECT|INSERT|UPDATE|DELETE)\s' 2>/dev/null | grep -qvE "^\s*#" 2>/dev/null; then
-        HIGH+=("SQL Injection: Python f-string in SQL query - use parameterized queries with %s or :param")
-    fi
-    if echo "$content" | grep -E '"(SELECT|INSERT|UPDATE|DELETE)\s.*\.format\(' 2>/dev/null | grep -qvE "^\s*#" 2>/dev/null; then
-        HIGH+=("SQL Injection: Python .format() in SQL query - use parameterized queries")
-    fi
-
-    # Go fmt.Sprintf in SQL
-    if echo "$content" | grep -E 'fmt\.Sprintf\(\s*"(SELECT|INSERT|UPDATE|DELETE)' 2>/dev/null | grep -qvE "^\s*//" 2>/dev/null; then
-        HIGH+=("SQL Injection: Go fmt.Sprintf in SQL query - use prepared statements with \$1 placeholders")
-    fi
-
-    # Raw/unsafe query methods
-    if echo "$content" | grep -qE '\.(rawQuery|raw|unsafeRaw|executeRaw|query\s*\()\s*["`'"'"']?\s*(SELECT|INSERT|UPDATE|DELETE)' 2>/dev/null; then
-        MEDIUM+=("SQL: Raw query detected - ensure input is properly sanitized or use parameterized queries")
-    fi
-    if echo "$content" | grep -qE '\$executeRaw|\$queryRaw' 2>/dev/null; then
-        MEDIUM+=("SQL: Prisma raw query detected - ensure all parameters are passed via Prisma.sql template tag")
-    fi
+  if has_not "(\"|')(SELECT|INSERT|UPDATE|DELETE)\s.*\+" '^\s*(//|#|\*|/\*)'; then
+    HIGH+=("SQL injection: string concatenation in a SQL query. Use parameterized queries.")
+  fi
+  if has_not '`(SELECT|INSERT|UPDATE|DELETE)\s[^`]*\$\{' '^\s*(//|\*|/\*)'; then
+    HIGH+=("SQL injection: template literal interpolation in a SQL query. Use placeholders (\$1, ?, :param) or a tagged sql template.")
+  fi
+  if has_not "f\"(SELECT|INSERT|UPDATE|DELETE)\s|f'(SELECT|INSERT|UPDATE|DELETE)\s" '^\s*#'; then
+    HIGH+=("SQL injection: Python f-string in a SQL query. Pass parameters to execute() instead.")
+  fi
+  if has_not "[\"'](SELECT|INSERT|UPDATE|DELETE)\s.*\.format\(" '^\s*#'; then
+    HIGH+=("SQL injection: Python .format() in a SQL query. Pass parameters to execute() instead.")
+  fi
+  if has_not 'fmt\.Sprintf\(\s*"(SELECT|INSERT|UPDATE|DELETE)' '^\s*//'; then
+    HIGH+=("SQL injection: Go fmt.Sprintf builds a SQL query. Use prepared statements with placeholders.")
+  fi
+  if has "\.(rawQuery|raw|unsafeRaw|executeRaw)\s*\(\s*[\"'\`]?\s*(SELECT|INSERT|UPDATE|DELETE)"; then
+    MEDIUM+=("SQL: raw query API in use. Make sure every value is bound as a parameter.")
+  fi
+  if has '\$executeRawUnsafe|\$queryRawUnsafe'; then
+    HIGH+=("SQL injection: Prisma \$queryRawUnsafe/\$executeRawUnsafe. Use \$queryRaw with the Prisma.sql tagged template.")
+  elif has '\$executeRaw|\$queryRaw'; then
+    MEDIUM+=("SQL: Prisma raw query. Pass values through the tagged template, never by string building.")
+  fi
 }
 
 # =============================================================================
-# XSS DETECTION
+# 2. XSS
 # =============================================================================
-
 check_xss() {
-    local content="$1"
-
-    # dangerouslySetInnerHTML in React
-    if echo "$content" | grep -q "dangerouslySetInnerHTML" 2>/dev/null; then
-        HIGH+=("XSS: dangerouslySetInnerHTML detected - ensure content is sanitized with DOMPurify or similar before rendering")
-    fi
-
-    # innerHTML assignment
-    if echo "$content" | grep -E "\.innerHTML\s*=" 2>/dev/null | grep -qvE "//|/\*|\*/" 2>/dev/null; then
-        HIGH+=("XSS: Direct innerHTML assignment - use textContent for text or sanitize HTML with DOMPurify")
-    fi
-
-    # outerHTML assignment
-    if echo "$content" | grep -qE "\.outerHTML\s*=" 2>/dev/null; then
-        HIGH+=("XSS: Direct outerHTML assignment - sanitize content before injection")
-    fi
-
-    # document.write
-    if echo "$content" | grep -q "document\.write\s*(" 2>/dev/null; then
-        MEDIUM+=("XSS: document.write() detected - avoid in favor of DOM manipulation methods")
-    fi
-
-    # v-html in Vue
-    if echo "$content" | grep -q "v-html" 2>/dev/null; then
-        HIGH+=("XSS: Vue v-html directive detected - ensure content is sanitized before binding")
-    fi
-
-    # [innerHTML] in Angular
-    if echo "$content" | grep -q '\[innerHTML\]' 2>/dev/null; then
-        MEDIUM+=("XSS: Angular innerHTML binding - use DomSanitizer or Angular's built-in sanitization")
-    fi
-
-    # {@html} in Svelte
-    if echo "$content" | grep -q '{@html' 2>/dev/null; then
-        HIGH+=("XSS: Svelte {@html} tag detected - ensure content is sanitized")
-    fi
-
-    # Unescaped template output in EJS/Handlebars/Jinja
-    if echo "$content" | grep -qE '<%[-=]\s|{{{|{{!--|{%\s*autoescape\s+false' 2>/dev/null; then
-        MEDIUM+=("XSS: Unescaped template output detected - use escaped output (<%=, {{}}, etc.) for user data")
-    fi
-
-    # Jinja2 | safe filter or markupsafe
-    if echo "$content" | grep -qE '\|\s*safe\b' 2>/dev/null; then
-        MEDIUM+=("XSS: Template 'safe' filter detected - only use on trusted content, never on user input")
-    fi
+  has 'dangerouslySetInnerHTML' && HIGH+=("XSS: dangerouslySetInnerHTML. Sanitize with DOMPurify (or similar) before rendering.")
+  if has_not '\.innerHTML\s*=' '^\s*(//|\*|/\*)'; then
+    HIGH+=("XSS: innerHTML assignment. Use textContent for text, or sanitize the HTML first.")
+  fi
+  has '\.outerHTML\s*=' && HIGH+=("XSS: outerHTML assignment. Sanitize content before injecting it.")
+  has 'document\.write\s*\(' && MEDIUM+=("XSS: document.write(). Prefer DOM APIs.")
+  has 'v-html' && HIGH+=("XSS: Vue v-html. Sanitize the bound content.")
+  has '\[innerHTML\]' && MEDIUM+=("XSS: Angular [innerHTML] binding. Rely on DomSanitizer and never bypass it for user data.")
+  has '\{@html' && HIGH+=("XSS: Svelte {@html}. Sanitize the content.")
+  has '<%-|\{\{\{|\{%\s*autoescape\s+false' && MEDIUM+=("XSS: unescaped template output. Use the escaping form for user data.")
+  has '\|\s*safe\b' && MEDIUM+=("XSS: template 'safe' filter. Use it only on trusted content.")
+  return 0
 }
 
 # =============================================================================
-# HARDCODED SECRETS DETECTION
+# 3. Hardcoded secrets
 # =============================================================================
-
 check_hardcoded_secrets() {
-    local content="$1"
+  # .env files are where secrets are expected to live.
+  [[ "$FILE_NAME_LOWER" =~ ^\.env ]] && return 0
 
-    # Skip if this IS an .env file (expected to have secrets)
-    if echo "$FILE_NAME_LOWER" | grep -qE "^\.env"; then
-        return
-    fi
-
-    # API key patterns (generic)
-    if echo "$content" | grep -E "(api[_-]?key|apikey|api[_-]?secret)\s*[:=]\s*['\"][A-Za-z0-9_\-]{16,}" 2>/dev/null | grep -qvE "process\.env|os\.environ|os\.Getenv|env\(|env\[|ENV\[|example|placeholder|your[_-]|xxx|changeme|todo|REPLACE" 2>/dev/null; then
-        CRITICAL+=("SECRETS: Possible hardcoded API key detected - use environment variables")
-    fi
-
-    # AWS keys
-    if echo "$content" | grep -qE "(AKIA|ASIA)[A-Z0-9]{16}" 2>/dev/null; then
-        CRITICAL+=("SECRETS: AWS Access Key ID detected - rotate immediately and use IAM roles or environment variables")
-    fi
-
-    # Generic secret/password assignment with literal string value
-    if echo "$content" | grep -E "(password|passwd|secret|token|private[_-]?key)\s*[:=]\s*['\"][^'\"]{8,}" 2>/dev/null | grep -qvE "process\.env|os\.environ|os\.Getenv|env\(|env\[|ENV\[|example|placeholder|your[_-]|xxx|changeme|todo|REPLACE|hash|bcrypt|argon|\*\*\*|type|interface|schema|model|validation|zod|yup|joi|describe|test|spec|mock" 2>/dev/null; then
-        HIGH+=("SECRETS: Possible hardcoded password/secret/token - use environment variables or a secrets manager")
-    fi
-
-    # JWT secret hardcoded
-    if echo "$content" | grep -E "(jwt[_-]?secret|JWT_SECRET)\s*[:=]\s*['\"][^'\"]{4,}" 2>/dev/null | grep -qvE "process\.env|os\.environ|os\.Getenv|env\(|env\[|ENV\[|example|placeholder|changeme" 2>/dev/null; then
-        CRITICAL+=("SECRETS: Hardcoded JWT secret - use environment variables (compromise = all tokens forged)")
-    fi
-
-    # Private keys in code
-    if echo "$content" | grep -qE "-----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----" 2>/dev/null; then
-        CRITICAL+=("SECRETS: Private key embedded in source code - extract to a secure file and reference via env var")
-    fi
-
-    # Database connection strings with credentials
-    if echo "$content" | grep -E "(postgres|mysql|mongodb|redis|amqp)://[^:]+:[^@]+@" 2>/dev/null | grep -qvE "process\.env|os\.environ|os\.Getenv|env\(|env\[|localhost|127\.0\.0\.1|example|placeholder|changeme" 2>/dev/null; then
-        HIGH+=("SECRETS: Database connection string with credentials detected - use environment variables")
-    fi
-
-    # GitHub/GitLab tokens
-    if echo "$content" | grep -qE "(ghp_[A-Za-z0-9]{36}|gho_[A-Za-z0-9]{36}|glpat-[A-Za-z0-9\-]{20})" 2>/dev/null; then
-        CRITICAL+=("SECRETS: GitHub/GitLab personal access token detected - rotate immediately")
-    fi
-
-    # Slack tokens
-    if echo "$content" | grep -qE "xox[baprs]-[A-Za-z0-9\-]+" 2>/dev/null; then
-        CRITICAL+=("SECRETS: Slack token detected - rotate and use environment variables")
-    fi
-
-    # Stripe keys
-    if echo "$content" | grep -qE "(sk_live_|rk_live_)[A-Za-z0-9]{20,}" 2>/dev/null; then
-        CRITICAL+=("SECRETS: Stripe live secret key detected - rotate immediately and use environment variables")
-    fi
+  if hasi_not "(api[_-]?key|apikey|api[_-]?secret)\s*[:=]\s*['\"][A-Za-z0-9_\-]{16,}" "$ENV_READS|$PLACEHOLDERS"; then
+    CRITICAL+=("Secrets: possible hardcoded API key. Load it from the environment or a secrets manager.")
+  fi
+  if has '(AKIA|ASIA)[A-Z0-9]{16}'; then
+    CRITICAL+=("Secrets: AWS access key ID in the file. Rotate it and use IAM roles or environment variables.")
+  fi
+  if hasi_not "(password|passwd|secret|token|private[_-]?key)\s*[:=]\s*['\"][^'\"]{8,}" "$ENV_READS|$PLACEHOLDERS|hash|bcrypt|argon|\*\*\*|type|interface|schema|model|validation|zod|yup|joi|describe|test|spec|mock"; then
+    HIGH+=("Secrets: possible hardcoded password, secret, or token. Use environment variables or a secrets manager.")
+  fi
+  if hasi_not "(jwt[_-]?secret)\s*[:=]\s*['\"][^'\"]{4,}" "$ENV_READS|$PLACEHOLDERS"; then
+    CRITICAL+=("Secrets: hardcoded JWT secret. Anyone holding it can forge tokens; load it from the environment.")
+  fi
+  if has '-----BEGIN (RSA |EC |DSA |OPENSSH |ENCRYPTED )?PRIVATE KEY-----'; then
+    CRITICAL+=("Secrets: private key embedded in the file. Move it to a protected file or secret store and reference it.")
+  fi
+  if has_not '(postgres(ql)?|mysql|mongodb(\+srv)?|redis|amqp)://[^:/@ ]+:[^@ ]+@' "$ENV_READS|localhost|127\.0\.0\.1|$PLACEHOLDERS"; then
+    HIGH+=("Secrets: connection string with embedded credentials. Build it from environment variables.")
+  fi
+  if has '(ghp_[A-Za-z0-9]{36}|gho_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{22,}|glpat-[A-Za-z0-9_-]{20})'; then
+    CRITICAL+=("Secrets: GitHub or GitLab access token. Revoke and rotate it.")
+  fi
+  if has 'xox[baprs]-[A-Za-z0-9-]{10,}'; then
+    CRITICAL+=("Secrets: Slack token. Revoke it and load the replacement from the environment.")
+  fi
+  if has '(sk_live_|rk_live_)[A-Za-z0-9]{20,}'; then
+    CRITICAL+=("Secrets: Stripe live secret key. Roll it in the Stripe dashboard and load it from the environment.")
+  fi
+  return 0
 }
 
 # =============================================================================
-# INSECURE CRYPTO DETECTION
+# 4. Insecure cryptography
 # =============================================================================
-
 check_insecure_crypto() {
-    local content="$1"
-
-    # MD5 for hashing (not checksums)
-    if echo "$content" | grep -E "(createHash|hashlib\.md5|md5\(|MD5\.Create|Digest::MD5)" 2>/dev/null | grep -qiE "(password|passwd|secret|token|credential)" 2>/dev/null; then
-        HIGH+=("CRYPTO: MD5 used for password/secret hashing - use bcrypt, scrypt, or argon2 instead")
-    fi
-
-    # SHA1 for password hashing
-    if echo "$content" | grep -E "(createHash.*sha1|hashlib\.sha1|SHA1\.Create)" 2>/dev/null | grep -qiE "(password|passwd|secret|credential)" 2>/dev/null; then
-        HIGH+=("CRYPTO: SHA1 used for password hashing - use bcrypt, scrypt, or argon2 instead")
-    fi
-
-    # MD5/SHA1 used at all (lower severity - might be for checksums)
-    if echo "$content" | grep -E "createHash\(['\"]md5['\"]|hashlib\.md5|\.update.*\.digest\(\)" 2>/dev/null | grep -qvE "checksum|integrity|fingerprint|etag|cache" 2>/dev/null; then
-        LOW+=("CRYPTO: MD5 usage detected - if used for security purposes, upgrade to SHA-256 or better")
-    fi
-
-    # Math.random for security purposes
-    if echo "$content" | grep -E "Math\.random\(\)" 2>/dev/null | grep -qiE "(token|secret|key|password|nonce|salt|random|id|uuid|session)" 2>/dev/null; then
-        HIGH+=("CRYPTO: Math.random() used for security-sensitive value - use crypto.randomBytes() or crypto.getRandomValues()")
-    fi
-
-    # Python random (not secrets) for security
-    if echo "$content" | grep -qE "import random|from random import" 2>/dev/null; then
-        if echo "$content" | grep -qiE "(token|secret|key|password|nonce|salt|otp|code)" 2>/dev/null; then
-            MEDIUM+=("CRYPTO: Python 'random' module may be used for security values - use 'secrets' module instead")
-        fi
-    fi
-
-    # Weak TLS versions
-    if echo "$content" | grep -qE "TLSv1[^.]|SSLv3|TLS_1_0|TLS_1_1|ssl\.PROTOCOL_TLSv1\b" 2>/dev/null; then
-        HIGH+=("CRYPTO: Weak TLS/SSL version detected - use TLS 1.2 or 1.3 minimum")
-    fi
-
-    # ECB mode
-    if echo "$content" | grep -qE "ECB|MODE_ECB|AES-128-ECB|AES-256-ECB" 2>/dev/null; then
-        HIGH+=("CRYPTO: ECB block cipher mode detected - use GCM, CBC with HMAC, or another authenticated mode")
-    fi
+  if has_with "(createHash\(['\"]md5|hashlib\.md5|\bmd5\(|MD5\.Create|Digest::MD5)" '(password|passwd|secret|token|credential)'; then
+    HIGH+=("Crypto: MD5 used near password or secret handling. Hash passwords with argon2id, bcrypt, or scrypt.")
+  elif has_not "createHash\(['\"]md5['\"]|hashlib\.md5|\bmd5\(" 'checksum|integrity|fingerprint|etag|cache'; then
+    LOW+=("Crypto: MD5 in use. Fine for non-security checksums; use SHA-256 or better for anything security-related.")
+  fi
+  if has_with "(createHash\(['\"]sha1|hashlib\.sha1|SHA1\.Create)" '(password|passwd|secret|credential)'; then
+    HIGH+=("Crypto: SHA-1 used for password hashing. Use argon2id, bcrypt, or scrypt.")
+  fi
+  if has_with 'Math\.random\(\)' '(token|secret|key|password|passwd|nonce|salt|uuid|session|otp)'; then
+    HIGH+=("Crypto: Math.random() for a security-sensitive value. Use crypto.randomBytes() or crypto.getRandomValues().")
+  fi
+  if [[ "$FILE_EXT" == "py" ]] && has '^\s*(import random|from random import)' && hasi '(token|secret|password|nonce|salt|otp)'; then
+    MEDIUM+=("Crypto: Python 'random' module in a file that handles secrets. Use the 'secrets' module for security values.")
+  fi
+  if has '(TLSv1(\.[01]|_[01])?|SSLv[23]|TLS_1_[01])([^0-9._]|$)'; then
+    HIGH+=("Crypto: TLS 1.0/1.1 or SSL enabled. Require TLS 1.2 or 1.3.")
+  fi
+  if hasi '\becb\b|mode_ecb'; then
+    HIGH+=("Crypto: ECB cipher mode. Use an authenticated mode such as AES-GCM.")
+  fi
+  return 0
 }
 
 # =============================================================================
-# COMMAND INJECTION DETECTION
+# 5. Command injection
 # =============================================================================
-
 check_command_injection() {
-    local content="$1"
-
-    # eval() with variable input
-    if echo "$content" | grep -E "\beval\s*\(" 2>/dev/null | grep -qvE "//|#|/\*|\*/|eslint|webpack|babel|jest" 2>/dev/null; then
-        HIGH+=("INJECTION: eval() detected - avoid eval entirely; use JSON.parse, Function constructor, or specific parsers")
+  if has_not '\beval\s*\(' '^\s*(//|#|\*|/\*)|eslint|webpack|babel|jest'; then
+    HIGH+=("Injection: eval(). Replace it with a parser for the specific format (for example JSON.parse).")
+  fi
+  if has_not 'new\s+Function\s*\(' '^\s*(//|\*|/\*)'; then
+    MEDIUM+=("Injection: new Function(). Same risk as eval with user-controlled input.")
+  fi
+  if has 'child_process'; then
+    if has "(exec|execSync)\s*\(\s*[\`\"'][^)]*\\\$\{"; then
+      HIGH+=("Injection: shell command built with interpolation. Use execFile or spawn with an argument array.")
+    elif has '\b(exec|execSync|spawn|spawnSync|execFile|execFileSync)\s*\('; then
+      MEDIUM+=("Injection: shell command execution. Keep user input out of the command; prefer execFile with an argument array.")
     fi
-
-    # new Function() with external input
-    if echo "$content" | grep -E "new\s+Function\s*\(" 2>/dev/null | grep -qvE "//|/\*|\*/" 2>/dev/null; then
-        MEDIUM+=("INJECTION: new Function() detected - similar to eval, avoid with user-controlled input")
-    fi
-
-    # Node.js child_process exec/execSync with string
-    if echo "$content" | grep -E "(child_process|exec|execSync|spawn|spawnSync|execFile)\s*\(" 2>/dev/null | grep -qvE "//|/\*|\*/" 2>/dev/null; then
-        if echo "$content" | grep -qE "(exec|execSync)\s*\(\s*(\`|\"|\')[^)]*\$\{" 2>/dev/null; then
-            HIGH+=("INJECTION: Command execution with interpolated string - use execFile with argument array instead")
-        else
-            MEDIUM+=("INJECTION: Shell command execution detected - ensure input is not user-controlled; prefer execFile with args array")
-        fi
-    fi
-
-    # Python os.system / subprocess.call with shell=True
-    if echo "$content" | grep -E "os\.system\(|os\.popen\(" 2>/dev/null | grep -qvE "^\s*#" 2>/dev/null; then
-        HIGH+=("INJECTION: Python os.system/os.popen - use subprocess.run with shell=False and list arguments")
-    fi
-    if echo "$content" | grep -qE "subprocess\.(call|run|Popen).*shell\s*=\s*True" 2>/dev/null; then
-        HIGH+=("INJECTION: Python subprocess with shell=True - use shell=False with argument list")
-    fi
-
-    # Go os/exec with user input
-    if echo "$content" | grep -qE 'exec\.Command\(\s*"(sh|bash|cmd)"' 2>/dev/null; then
-        MEDIUM+=("INJECTION: Go shell invocation via exec.Command - pass commands directly without shell wrapper")
-    fi
-
-    # PHP dangerous functions (only check in PHP files)
-    if [ "$FILE_EXT" = "php" ]; then
-        if echo "$content" | grep -E "\b(system|exec|passthru|shell_exec|popen|proc_open)\s*\(" 2>/dev/null | grep -qvE "^\s*//" 2>/dev/null; then
-            HIGH+=("INJECTION: PHP shell execution function - ensure input is escaped with escapeshellarg/escapeshellcmd")
-        fi
-    fi
-
-    # Ruby system/exec/backtick (only check in Ruby files)
-    if [ "$FILE_EXT" = "rb" ]; then
-        if echo "$content" | grep -qE "\b(system|exec|\`)\s*[\"'].*#\{" 2>/dev/null; then
-            HIGH+=("INJECTION: Ruby command with string interpolation - use array form of system()")
-        fi
-    fi
+  fi
+  if has_not 'os\.system\(|os\.popen\(' '^\s*#'; then
+    HIGH+=("Injection: os.system/os.popen. Use subprocess.run with a list of arguments and shell=False.")
+  fi
+  has 'subprocess\.(call|run|Popen|check_output|check_call).*shell\s*=\s*True' && HIGH+=("Injection: subprocess with shell=True. Pass a list of arguments with shell=False.")
+  has 'exec\.Command\(\s*"(sh|bash|cmd)"' && MEDIUM+=("Injection: Go exec.Command through a shell. Call the program directly with separate arguments.")
+  if [[ "$FILE_EXT" == "php" ]] && has_not '\b(system|exec|passthru|shell_exec|popen|proc_open)\s*\(' '^\s*//'; then
+    HIGH+=("Injection: PHP shell execution. Escape arguments with escapeshellarg, or avoid the shell.")
+  fi
+  if [[ "$FILE_EXT" == "rb" ]] && has "(system|exec|%x)\s*\(?\s*[\"'\`].*#\{"; then
+    HIGH+=("Injection: Ruby shell command with interpolation. Use the array form of system().")
+  fi
+  return 0
 }
 
 # =============================================================================
-# PATH TRAVERSAL DETECTION
+# 6. Path traversal
 # =============================================================================
-
 check_path_traversal() {
-    local content="$1"
-
-    # File operations with user input indicators
-    if echo "$content" | grep -E "(readFile|readFileSync|writeFile|createReadStream|createWriteStream|open\(|fopen)" 2>/dev/null | grep -qE "(req\.|request\.|params\.|query\.|body\.|args\[|argv)" 2>/dev/null; then
-        MEDIUM+=("PATH TRAVERSAL: File operation with possible user input - validate and sanitize file paths, use path.resolve and check against base directory")
-    fi
-
-    # Direct path construction from user input
-    if echo "$content" | grep -qE "(path\.join|path\.resolve|os\.path\.join)\s*\(.*\b(req\.|request\.|params|query|body|user_input|args)" 2>/dev/null; then
-        MEDIUM+=("PATH TRAVERSAL: Path constructed from user input - validate the resolved path is within the expected directory")
-    fi
-
-    # Express static file serving with user input
-    if echo "$content" | grep -qE "res\.(sendFile|download)\s*\(.*req\." 2>/dev/null; then
-        HIGH+=("PATH TRAVERSAL: Serving files based on user input - validate path is within allowed directory")
-    fi
-
-    # Go filepath from user input
-    if echo "$content" | grep -qE "filepath\.Join.*r\.URL|filepath\.Join.*r\.Form|os\.Open.*r\.(URL|Form)" 2>/dev/null; then
-        MEDIUM+=("PATH TRAVERSAL: Go file operation with request input - use filepath.Clean and validate against base path")
-    fi
+  if has_with '(readFile|readFileSync|writeFile|createReadStream|createWriteStream|\bopen\(|fopen)' '(req\.|request\.|params\.|query\.|body\.|args\[|argv)'; then
+    MEDIUM+=("Path traversal: file access with possible request input. Resolve the path and check it stays under the intended base directory.")
+  fi
+  if has '(path\.join|path\.resolve|os\.path\.join)\s*\(.*\b(req\.|request\.|params|query|body|user_input)'; then
+    MEDIUM+=("Path traversal: path built from user input. Verify the resolved path is inside the expected directory.")
+  fi
+  has 'res\.(sendFile|download)\s*\(.*req\.' && HIGH+=("Path traversal: file served from a request-controlled path. Restrict to an allowed directory.")
+  has 'filepath\.Join.*r\.URL|filepath\.Join.*r\.Form|os\.Open.*r\.(URL|Form)' && MEDIUM+=("Path traversal: Go file access from request input. Clean the path and check it against the base directory.")
+  return 0
 }
 
 # =============================================================================
-# CORS MISCONFIGURATION DETECTION
+# 7. CORS
 # =============================================================================
-
 check_cors() {
-    local content="$1"
-
-    # Wildcard CORS origin
-    if echo "$content" | grep -E "Access-Control-Allow-Origin.*\*|origin:\s*['\"]?\*['\"]?|cors\(\s*\)|allowAllOrigins|AllowAllOrigins" 2>/dev/null | grep -qvE "//|#|/\*|\*/" 2>/dev/null; then
-        HIGH+=("CORS: Wildcard origin (*) detected - restrict to specific allowed origins in production")
-    fi
-
-    # Reflecting Origin header without validation
-    if echo "$content" | grep -E "req\.headers?\.origin|request\.headers?\[.origin.\]" 2>/dev/null | grep -qE "Access-Control-Allow-Origin|setHeader|header\(" 2>/dev/null; then
-        MEDIUM+=("CORS: Origin reflection detected - validate origin against allowlist before reflecting")
-    fi
-
-    # Credentials with wildcard origin
-    if echo "$content" | grep -qE "Access-Control-Allow-Credentials.*true|credentials:\s*true|allowCredentials.*true" 2>/dev/null; then
-        if echo "$content" | grep -qE "origin.*\*|Allow-Origin.*\*" 2>/dev/null; then
-            CRITICAL+=("CORS: Credentials enabled with wildcard origin - this is a serious security vulnerability")
-        fi
-    fi
+  if has_not "Access-Control-Allow-Origin.*\*|origin:\s*['\"]?\*['\"]?|cors\(\s*\)|allowAllOrigins|AllowAllOrigins" '^\s*(//|#|\*|/\*)'; then
+    HIGH+=("CORS: wildcard origin. Restrict to an allowlist of origins in production.")
+  fi
+  if has_with 'req\.headers?\.origin|request\.headers?\[.origin.\]' 'Access-Control-Allow-Origin|setHeader|header\('; then
+    MEDIUM+=("CORS: request Origin reflected. Check it against an allowlist before echoing it back.")
+  fi
+  if hasi 'Access-Control-Allow-Credentials.*true|credentials:\s*true|allowCredentials.*true' && has 'origin.*\*|Allow-Origin.*\*'; then
+    CRITICAL+=("CORS: credentials allowed together with a wildcard origin.")
+  fi
+  return 0
 }
 
 # =============================================================================
-# INPUT VALIDATION DETECTION
+# 8. Input validation
 # =============================================================================
-
 check_input_validation() {
-    local content="$1"
-
-    # API route handlers without visible validation
-    if echo "$content" | grep -qE "(req\.body|req\.params|req\.query|request\.json|request\.form|request\.args)" 2>/dev/null; then
-        # Check if any validation library is used in this file
-        if ! echo "$content" | grep -qiE "(zod|yup|joi|celebrate|class-validator|express-validator|pydantic|marshmallow|validate|sanitize|Validator|@IsString|@IsEmail|@IsInt)" 2>/dev/null; then
-            LOW+=("VALIDATION: Request input used without visible validation library - consider using zod, joi, or similar for input validation")
-        fi
+  if has '(req\.body|req\.params|req\.query|request\.json|request\.form|request\.args)'; then
+    if ! hasi '(zod|yup|joi|celebrate|class-validator|express-validator|pydantic|marshmallow|validate|sanitize|Validator|@IsString|@IsEmail|@IsInt)'; then
+      LOW+=("Validation: request input used with no visible validation. Validate with a schema library (zod, joi, pydantic, ...).")
     fi
-
-    # JSON.parse without try/catch
-    if echo "$content" | grep -qE "JSON\.parse\s*\(" 2>/dev/null; then
-        if ! echo "$content" | grep -qE "try\s*\{" 2>/dev/null; then
-            LOW+=("VALIDATION: JSON.parse without error handling - wrap in try/catch to handle malformed input")
-        fi
-    fi
-
-    # parseInt without radix or validation
-    if echo "$content" | grep -qE "parseInt\s*\(\s*(req\.|request\.|params|query)" 2>/dev/null; then
-        LOW+=("VALIDATION: parseInt on user input - validate input is numeric first and specify radix (10)")
-    fi
+  fi
+  if has 'JSON\.parse\s*\(' && ! has 'try\s*\{'; then
+    LOW+=("Validation: JSON.parse without error handling. Catch malformed input.")
+  fi
+  has 'parseInt\s*\(\s*(req\.|request\.|params|query)' && LOW+=("Validation: parseInt on user input. Check it is numeric and pass radix 10.")
+  return 0
 }
 
 # =============================================================================
-# INSECURE DESERIALIZATION DETECTION
+# 9. Insecure deserialization
 # =============================================================================
-
 check_deserialization() {
-    local content="$1"
-
-    # Python pickle with untrusted data
-    if echo "$content" | grep -qE "pickle\.(load|loads)\s*\(" 2>/dev/null; then
-        HIGH+=("DESERIALIZATION: Python pickle detected - pickle can execute arbitrary code; use JSON for untrusted data")
+  if [[ "$FILE_EXT" == "py" ]]; then
+    has 'pickle\.(load|loads)\s*\(' && HIGH+=("Deserialization: pickle can execute code. Use JSON (or another data-only format) for untrusted data.")
+    if has_not 'yaml\.load\s*\(' 'SafeLoader|CSafeLoader|safe_load'; then
+      HIGH+=("Deserialization: yaml.load without SafeLoader. Use yaml.safe_load().")
     fi
-
-    # Python yaml.load (unsafe by default)
-    if echo "$content" | grep -E "yaml\.load\s*\(" 2>/dev/null | grep -qvE "Loader\s*=\s*yaml\.SafeLoader|safe_load" 2>/dev/null; then
-        HIGH+=("DESERIALIZATION: yaml.load without SafeLoader - use yaml.safe_load() to prevent code execution")
-    fi
-
-    # Java deserialization
-    if echo "$content" | grep -qE "ObjectInputStream|readObject\s*\(|XMLDecoder" 2>/dev/null; then
-        MEDIUM+=("DESERIALIZATION: Java object deserialization - validate object types and use allowlists")
-    fi
-
-    # PHP unserialize
-    if echo "$content" | grep -qE "\bunserialize\s*\(" 2>/dev/null; then
-        HIGH+=("DESERIALIZATION: PHP unserialize detected - use JSON decode for untrusted data; if required, use allowed_classes option")
-    fi
-
-    # Ruby Marshal.load
-    if echo "$content" | grep -qE "Marshal\.load\s*\(" 2>/dev/null; then
-        HIGH+=("DESERIALIZATION: Ruby Marshal.load - can execute arbitrary code; use JSON for untrusted data")
-    fi
+  fi
+  if [[ "$FILE_EXT" =~ ^(java|kt|scala)$ ]] && has 'ObjectInputStream|readObject\s*\(|XMLDecoder'; then
+    MEDIUM+=("Deserialization: Java object deserialization. Use an allowlist filter (ObjectInputFilter) or a data-only format.")
+  fi
+  if [[ "$FILE_EXT" == "php" ]] && has '\bunserialize\s*\('; then
+    HIGH+=("Deserialization: PHP unserialize. Use json_decode for untrusted data, or set allowed_classes.")
+  fi
+  if [[ "$FILE_EXT" == "rb" ]] && has 'Marshal\.load\s*\('; then
+    HIGH+=("Deserialization: Ruby Marshal.load can execute code. Use JSON for untrusted data.")
+  fi
+  return 0
 }
 
 # =============================================================================
-# AUTH ENDPOINT RATE LIMITING CHECK
+# 10. Rate limiting on auth endpoints
 # =============================================================================
-
 check_rate_limiting() {
-    local content="$1"
-    local file_lower
-    file_lower=$(echo "$FILE_NAME_LOWER" | tr '[:upper:]' '[:lower:]')
-
-    # Only check auth-related files
-    if echo "$file_lower" | grep -qE "(auth|login|signin|register|signup|password|reset|forgot|verify|otp|2fa|mfa)"; then
-        if ! echo "$content" | grep -qiE "(rateLimit|rate[_-]?limit|throttle|slowDown|RateLimiter|Throttler|limiter|RateLimit)" 2>/dev/null; then
-            MEDIUM+=("RATE LIMIT: Auth endpoint without visible rate limiting - protect against brute force with rate limiting middleware")
-        fi
+  if [[ "$FILE_NAME_LOWER" =~ (auth|login|signin|register|signup|password|reset|forgot|verify|otp|2fa|mfa) ]]; then
+    if ! hasi '(rateLimit|rate[_-]?limit|throttle|slowDown|RateLimiter|Throttler|limiter)'; then
+      MEDIUM+=("Rate limit: auth endpoint with no visible rate limiting. Add limits against brute force and credential stuffing.")
     fi
+  fi
+  return 0
 }
 
 # =============================================================================
-# DOCKER SECURITY CHECKS
+# 11. Dockerfile
 # =============================================================================
-
 check_docker_security() {
-    local content="$1"
-
-    # Running as root
-    if echo "$content" | grep -qE "^USER root$" 2>/dev/null; then
-        MEDIUM+=("DOCKER: Container configured to run as root - add a non-root USER instruction")
-    fi
-
-    # No USER instruction at all (defaults to root)
-    if echo "$FILE_NAME_LOWER" | grep -qE "^dockerfile"; then
-        if ! echo "$content" | grep -qE "^USER " 2>/dev/null; then
-            MEDIUM+=("DOCKER: No USER instruction - container will run as root; add USER to run as non-root")
-        fi
-    fi
-
-    # Using :latest tag
-    if echo "$content" | grep -qE "^FROM\s+\S+:latest\b|^FROM\s+\S+\s*$" 2>/dev/null; then
-        LOW+=("DOCKER: Using :latest or unpinned image tag - pin specific versions for reproducibility and security")
-    fi
-
-    # COPY secrets or env files
-    if echo "$content" | grep -qE "^(COPY|ADD)\s+.*\.(env|pem|key|cert|p12|pfx)" 2>/dev/null; then
-        HIGH+=("DOCKER: Copying secret/key files into image - use Docker secrets, mount volumes, or multi-stage builds instead")
-    fi
-
-    # ADD with URL (potential supply chain risk)
-    if echo "$content" | grep -qE "^ADD\s+https?://" 2>/dev/null; then
-        MEDIUM+=("DOCKER: ADD with URL - use COPY + RUN curl/wget to validate downloads; ADD does not verify checksums")
-    fi
-
-    # Exposing sensitive ports
-    if echo "$content" | grep -qE "^EXPOSE\s+(22|3306|5432|6379|27017)\b" 2>/dev/null; then
-        LOW+=("DOCKER: Exposing database/SSH port directly - use Docker networks for internal communication")
-    fi
+  [[ "$FILE_NAME_LOWER" =~ ^dockerfile || "$FILE_NAME_LOWER" =~ \.dockerfile$ ]] || return 0
+  has '^USER root\s*$' && MEDIUM+=("Docker: container runs as root. Add a non-root USER.")
+  has '^USER ' || MEDIUM+=("Docker: no USER instruction, so the container runs as root. Add a non-root USER.")
+  if has '^FROM\s+\S+:latest\b' || has_not '^FROM\s+[^:@ ]+\s*$' '^FROM\s+scratch'; then
+    LOW+=("Docker: image tag is :latest or unpinned. Pin a version or digest.")
+  fi
+  has '^(COPY|ADD)\s+.*\.(env|pem|key|cert|p12|pfx)\b' && HIGH+=("Docker: secret or key file copied into the image. Use build secrets or runtime mounts.")
+  has '^ADD\s+https?://' && MEDIUM+=("Docker: ADD from a URL. Download with a checksum check instead.")
+  has '^EXPOSE\s+(22|3306|5432|6379|27017)\b' && LOW+=("Docker: database or SSH port exposed. Keep it on an internal network.")
+  return 0
 }
 
-# =============================================================================
-# RUN ALL CHECKS
-# =============================================================================
-
-if [ "$IS_CODE" = true ] || [ "$IS_TEMPLATE" = true ]; then
-    check_sql_injection "$FILE_CONTENT"
-    check_xss "$FILE_CONTENT"
-    check_hardcoded_secrets "$FILE_CONTENT"
-    check_insecure_crypto "$FILE_CONTENT"
-    check_command_injection "$FILE_CONTENT"
-    check_path_traversal "$FILE_CONTENT"
-    check_cors "$FILE_CONTENT"
-    check_input_validation "$FILE_CONTENT"
-    check_deserialization "$FILE_CONTENT"
-    check_rate_limiting "$FILE_CONTENT"
+if [[ "$IS_CODE" == true || "$IS_TEMPLATE" == true ]]; then
+  check_sql_injection
+  check_xss
+  check_hardcoded_secrets
+  check_insecure_crypto
+  check_command_injection
+  check_path_traversal
+  check_cors
+  check_input_validation
+  check_deserialization
+  check_rate_limiting
 fi
-
-if [ "$IS_CONFIG" = true ]; then
-    check_hardcoded_secrets "$FILE_CONTENT"
-    check_cors "$FILE_CONTENT"
-    check_docker_security "$FILE_CONTENT"
-
-    # Also check for insecure crypto in config
-    check_insecure_crypto "$FILE_CONTENT"
+if [[ "$IS_CONFIG" == true ]]; then
+  check_hardcoded_secrets
+  check_cors
+  check_docker_security
+  check_insecure_crypto
 fi
 
 # =============================================================================
-# LOG FINDINGS
+# Checklists for security-sensitive file types
 # =============================================================================
+IS_AUTH=false
+IS_API=false
+IS_DB=false
 
-TOTAL_FINDINGS=$(( ${#CRITICAL[@]} + ${#HIGH[@]} + ${#MEDIUM[@]} + ${#LOW[@]} ))
-
-if [ "$TOTAL_FINDINGS" -gt 0 ]; then
-    {
-        echo "$(date '+%Y-%m-%d %H:%M:%S') - Security scan of $FILE_PATH"
-        echo "  Total findings: $TOTAL_FINDINGS (Critical: ${#CRITICAL[@]}, High: ${#HIGH[@]}, Medium: ${#MEDIUM[@]}, Low: ${#LOW[@]})"
-        for finding in "${CRITICAL[@]}"; do
-            echo "  [CRITICAL] $finding"
-        done
-        for finding in "${HIGH[@]}"; do
-            echo "  [HIGH] $finding"
-        done
-        for finding in "${MEDIUM[@]}"; do
-            echo "  [MEDIUM] $finding"
-        done
-        for finding in "${LOW[@]}"; do
-            echo "  [LOW] $finding"
-        done
-        echo "---"
-    } >> "$HOOKS_LOG_DIR/security-issues.log"
+if [[ "$FILE_NAME_LOWER" =~ (auth|login|signin|sign-in|signup|sign-up|register|password|passwd|two-factor|2fa|mfa|totp|oauth|sso|saml|jwt|session|cookie|credential|permission|rbac|acl) ]] \
+  || [[ "$FILE_PATH_LOWER" =~ /(auth|authentication|authorization|identity|security|passport|guards|policies)/ ]] \
+  || [[ "$FILE_PATH_LOWER" =~ \[\.\.\.nextauth\] ]]; then
+  IS_AUTH=true
+  NOTES+=("Auth code checklist: validate input, hash passwords with argon2id or bcrypt, compare secrets in constant time, set Secure/HttpOnly/SameSite on cookies, rate-limit the endpoint.")
+  BASE="${FILE_NAME%.*}"
+  HAS_TESTS=false
+  for suffix in .test .spec _test _spec; do
+    for ext in ts js tsx jsx py go rb java; do
+      [[ -f "$FILE_DIR/${BASE}${suffix}.${ext}" ]] && HAS_TESTS=true
+    done
+  done
+  [[ -f "$FILE_DIR/test_${BASE}.py" ]] && HAS_TESTS=true
+  if [[ -d "$FILE_DIR/__tests__" ]] && find "$FILE_DIR/__tests__" -maxdepth 1 -name "${BASE}*" -print -quit 2>/dev/null | grep -q .; then
+    HAS_TESTS=true
+  fi
+  [[ "$HAS_TESTS" == true ]] || NOTES+=("No test file found next to this auth code. Security-critical paths deserve tests for the failure cases.")
 fi
 
-# Log all scanned files for audit trail
-echo "$(date '+%Y-%m-%d %H:%M:%S') - Scanned: $FILE_PATH (findings: $TOTAL_FINDINGS)" >> "$HOOKS_LOG_DIR/scan-activity.log"
-
-# =============================================================================
-# OUTPUT STRUCTURED RESPONSE
-# =============================================================================
-
-# Only output if we have findings or suggestions
-if [ "$TOTAL_FINDINGS" -gt 0 ] || [ ${#SUGGESTIONS[@]} -gt 0 ]; then
-    OUTPUT="{"
-
-    # Build system message from findings (CRITICAL and HIGH get top billing)
-    if [ ${#CRITICAL[@]} -gt 0 ] || [ ${#HIGH[@]} -gt 0 ] || [ ${#MEDIUM[@]} -gt 0 ]; then
-        OUTPUT="$OUTPUT\"systemMessage\":\"LibreSecOps Security Scan ($TOTAL_FINDINGS findings):\\n"
-
-        if [ ${#CRITICAL[@]} -gt 0 ]; then
-            OUTPUT="$OUTPUT\\n[CRITICAL]\\n"
-            for finding in "${CRITICAL[@]}"; do
-                ESCAPED=$(echo "$finding" | sed 's/"/\\"/g')
-                OUTPUT="$OUTPUT- $ESCAPED\\n"
-            done
-        fi
-
-        if [ ${#HIGH[@]} -gt 0 ]; then
-            OUTPUT="$OUTPUT\\n[HIGH]\\n"
-            for finding in "${HIGH[@]}"; do
-                ESCAPED=$(echo "$finding" | sed 's/"/\\"/g')
-                OUTPUT="$OUTPUT- $ESCAPED\\n"
-            done
-        fi
-
-        if [ ${#MEDIUM[@]} -gt 0 ]; then
-            OUTPUT="$OUTPUT\\n[MEDIUM]\\n"
-            for finding in "${MEDIUM[@]}"; do
-                ESCAPED=$(echo "$finding" | sed 's/"/\\"/g')
-                OUTPUT="$OUTPUT- $ESCAPED\\n"
-            done
-        fi
-
-        OUTPUT="$OUTPUT\""
-    fi
-
-    # Add LOW findings and suggestions as additional context (less prominent)
-    if [ ${#LOW[@]} -gt 0 ] || [ ${#SUGGESTIONS[@]} -gt 0 ]; then
-        if [ ${#CRITICAL[@]} -gt 0 ] || [ ${#HIGH[@]} -gt 0 ] || [ ${#MEDIUM[@]} -gt 0 ]; then
-            OUTPUT="$OUTPUT,"
-        fi
-        OUTPUT="$OUTPUT\"additionalContext\":["
-        FIRST=true
-
-        for finding in "${LOW[@]}"; do
-            if [ "$FIRST" = true ]; then
-                FIRST=false
-            else
-                OUTPUT="$OUTPUT,"
-            fi
-            ESCAPED=$(echo "$finding" | sed 's/"/\\"/g')
-            OUTPUT="$OUTPUT{\"type\":\"text\",\"text\":\"[LOW] $ESCAPED\"}"
-        done
-
-        for suggestion in "${SUGGESTIONS[@]}"; do
-            if [ "$FIRST" = true ]; then
-                FIRST=false
-            else
-                OUTPUT="$OUTPUT,"
-            fi
-            ESCAPED=$(echo "$suggestion" | sed 's/"/\\"/g')
-            OUTPUT="$OUTPUT{\"type\":\"text\",\"text\":\"Suggestion: $ESCAPED\"}"
-        done
-
-        OUTPUT="$OUTPUT]"
-    fi
-
-    OUTPUT="$OUTPUT}"
-    echo "$OUTPUT"
+if [[ "$FILE_NAME_LOWER" =~ (model|schema|migration|query|queries|repository|dao|database|seed) ]] \
+  || [[ "$FILE_PATH_LOWER" =~ /(models|schemas|migrations|database|db|repositories|queries|prisma|entities)/ ]] \
+  || [[ "$FILE_EXT" =~ ^(sql|prisma)$ ]]; then
+  IS_DB=true
+  NOTES+=("Database code checklist: parameterized queries only, authorize before querying, return only the fields the caller needs.")
 fi
 
+if [[ "$FILE_NAME_LOWER" =~ (route|router|controller|handler|endpoint|middleware|interceptor|guard) ]] \
+  || [[ "$FILE_PATH_LOWER" =~ /(routes|api|controllers|handlers|endpoints|middleware)/ ]]; then
+  IS_API=true
+  if [[ "$IS_AUTH" == false ]]; then
+    NOTES+=("API endpoint checklist: authenticate, authorize per object, validate input, rate-limit, return safe errors.")
+  fi
+fi
+
+[[ "$FILE_NAME_LOWER" =~ (cors|cross-origin) ]] && NOTES+=("CORS config: no wildcard origins in production; list allowed methods and headers explicitly.")
+[[ "$FILE_NAME_LOWER" =~ (csp|security-headers|helmet|content-security) ]] && NOTES+=("Security headers: keep CSP free of unsafe-inline and unsafe-eval; check frame-ancestors and HSTS.")
+[[ "$FILE_NAME_LOWER" =~ (nginx\.conf|httpd\.conf|\.htaccess) ]] && NOTES+=("Web server config: review TLS settings, security headers, proxy rules, and directory listing.")
+[[ "$FILE_PATH_LOWER" =~ /(k8s|kubernetes|manifests|charts|helm)/ && "$FILE_EXT" =~ ^(yaml|yml|json)$ ]] && NOTES+=("Kubernetes manifest: check securityContext (runAsNonRoot, readOnlyRootFilesystem), resource limits, NetworkPolicies, and RBAC scope.")
+[[ "$FILE_EXT" =~ ^(tf|tfvars)$ ]] && NOTES+=("Terraform: check security groups, IAM policy scope, encryption settings, and public exposure.")
+if [[ "$FILE_PATH_LOWER" =~ /\.github/workflows/ || "$FILE_NAME_LOWER" =~ ^(jenkinsfile|\.gitlab-ci\.yml|\.travis\.yml|azure-pipelines\.yml|bitbucket-pipelines\.yml)$ ]]; then
+  NOTES+=("CI/CD config: keep secrets out of logs, prefer OIDC over long-lived tokens, pin third-party actions by commit SHA, set least-privilege permissions.")
+fi
+
+# Nearby files worth a look, capped at three names each.
+related() {
+  local label="$1"; shift
+  local found
+  found="$(find "$@" 2>/dev/null | head -3 | while IFS= read -r x; do basename "$x"; done | paste -sd, - || true)"
+  [[ -n "$found" ]] && NOTES+=("${label}: ${found//,/, }")
+  return 0
+}
+PARENT_DIR="$(dirname "$FILE_DIR")"
+if [[ "$IS_API" == true ]]; then
+  for d in "$FILE_DIR/middleware" "$FILE_DIR/../middleware"; do
+    [[ -d "$d" ]] && related "Middleware to review" "$d" -maxdepth 1 -type f
+  done
+fi
+if [[ "$IS_AUTH" == true && ${#PARENT_DIR} -gt 4 ]]; then
+  related "Rate limiting config to review" "$PARENT_DIR" -maxdepth 2 \( -iname '*rate*limit*' -o -iname '*throttle*' \) -not -path '*/node_modules/*'
+fi
+if [[ "$IS_DB" == true && ${#PARENT_DIR} -gt 4 ]]; then
+  related "Validation schemas to review" "$PARENT_DIR" -maxdepth 2 \( -iname '*valid*' -o -iname '*schema*' \) -not -path '*/node_modules/*'
+fi
+
+# =============================================================================
+# Output
+# =============================================================================
+TOTAL=$(( ${#CRITICAL[@]} + ${#HIGH[@]} + ${#MEDIUM[@]} + ${#LOW[@]} ))
+(( TOTAL > 0 || ${#NOTES[@]} > 0 )) || exit 0
+
+REPORT="LibreSecOps scan of ${REL_PATH}"
+(( TOTAL > 0 )) && REPORT+=" (${TOTAL} pattern finding(s); verify each before acting)"
+REPORT+=":"
+for f in ${CRITICAL[@]+"${CRITICAL[@]}"}; do REPORT+=$'\n'"[CRITICAL] $f"; done
+for f in ${HIGH[@]+"${HIGH[@]}"};     do REPORT+=$'\n'"[HIGH] $f"; done
+for f in ${MEDIUM[@]+"${MEDIUM[@]}"};   do REPORT+=$'\n'"[MEDIUM] $f"; done
+for f in ${LOW[@]+"${LOW[@]}"};      do REPORT+=$'\n'"[LOW] $f"; done
+for n in ${NOTES[@]+"${NOTES[@]}"};    do REPORT+=$'\n'"- $n"; done
+
+USER_MSG=""
+if (( ${#CRITICAL[@]} > 0 )); then
+  USER_MSG="LibreSecOps: ${#CRITICAL[@]} critical finding(s) in ${REL_PATH}. ${CRITICAL[0]}"
+fi
+
+jq -n --arg ctx "$REPORT" --arg msg "$USER_MSG" '
+  {hookSpecificOutput: {hookEventName: "PostToolUse", additionalContext: $ctx}}
+  + (if $msg == "" then {} else {systemMessage: $msg} end)'
 exit 0

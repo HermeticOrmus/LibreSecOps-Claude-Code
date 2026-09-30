@@ -1,4 +1,5 @@
 {
+  "description": "LibreSecOps security hooks: a one-line security profile at session start, a confirmation prompt before editing secret files, and a local pattern scan after each edit.",
   "hooks": {
     "SessionStart": [
       {
@@ -6,8 +7,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash $LIBRESECOPS_HOOKS_DIR/session-start.sh",
-            "timeout": 5000
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh\"",
+            "timeout": 10
           }
         ]
       }
@@ -18,8 +19,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash $LIBRESECOPS_HOOKS_DIR/pre-tool-use.sh",
-            "timeout": 2000
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/pre-tool-use.sh\"",
+            "timeout": 5
           }
         ]
       }
@@ -30,8 +31,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash $LIBRESECOPS_HOOKS_DIR/post-tool-use.sh",
-            "timeout": 5000
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh\"",
+            "timeout": 10
           }
         ]
       }
