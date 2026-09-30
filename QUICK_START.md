@@ -27,7 +27,7 @@ Grok Build reads the same plugin folders. Add the marketplace and install a plug
 
 ```bash
 grok plugin marketplace add HermeticOrmus/LibreSecOps-Claude-Code
-grok plugin install threat-modeling@libre-secops --trust
+grok plugin install threat-modeling@LibreSecOps-Claude-Code --trust
 # or, without the marketplace:
 grok plugin install HermeticOrmus/LibreSecOps-Claude-Code#plugins/threat-modeling --trust
 ```
