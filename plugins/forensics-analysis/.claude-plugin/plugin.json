@@ -1,0 +1,20 @@
+{
+  "name": "forensics-analysis",
+  "version": "1.0.0",
+  "description": "Digital forensics for authorized investigations: investigation planning, chain of custody, disk and artifact analysis, timelines, and memory forensics with Volatility.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "digital-forensics",
+    "incident-response",
+    "memory-forensics",
+    "volatility",
+    "chain-of-custody",
+    "dfir"
+  ]
+}

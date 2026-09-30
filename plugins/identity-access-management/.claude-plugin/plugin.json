@@ -1,0 +1,22 @@
+{
+  "name": "identity-access-management",
+  "version": "1.0.0",
+  "description": "Identity and access management: IAM architecture, SSO and MFA design, RBAC/ABAC/ReBAC access control models, authentication flow review, and access audits.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "iam",
+    "access-control",
+    "rbac",
+    "sso",
+    "mfa",
+    "oauth",
+    "oidc",
+    "saml"
+  ]
+}

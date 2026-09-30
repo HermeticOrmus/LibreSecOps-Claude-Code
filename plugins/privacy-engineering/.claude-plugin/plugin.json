@@ -1,0 +1,20 @@
+{
+  "name": "privacy-engineering",
+  "version": "1.0.0",
+  "description": "Privacy engineering: privacy by design, GDPR data protection impact assessments, personal data flow mapping, and technical privacy controls.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "privacy",
+    "gdpr",
+    "dpia",
+    "data-protection",
+    "privacy-by-design",
+    "ccpa"
+  ]
+}

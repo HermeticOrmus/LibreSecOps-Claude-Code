@@ -1,0 +1,20 @@
+{
+  "name": "threat-modeling",
+  "version": "1.0.0",
+  "description": "Threat modeling with STRIDE, attack trees, DREAD risk ranking, and MITRE ATT&CK mapping that turns a design into ranked threats with concrete mitigations.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "threat-modeling",
+    "stride",
+    "attack-trees",
+    "dread",
+    "mitre-attack",
+    "security-design"
+  ]
+}

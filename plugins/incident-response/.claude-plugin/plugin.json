@@ -1,0 +1,20 @@
+{
+  "name": "incident-response",
+  "version": "1.0.0",
+  "description": "Security incident response: incident command and coordination, forensic evidence handling, playbooks for common incident types, and blameless postmortems.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "incident-response",
+    "dfir",
+    "forensics",
+    "playbooks",
+    "postmortem",
+    "nist-800-61"
+  ]
+}

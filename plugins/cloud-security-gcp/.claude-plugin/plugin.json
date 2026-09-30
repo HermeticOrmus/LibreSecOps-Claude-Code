@@ -1,0 +1,21 @@
+{
+  "name": "cloud-security-gcp",
+  "version": "1.0.0",
+  "description": "Defensive Google Cloud security: IAM and Workload Identity, Organization Policies, VPC Service Controls, and CIS GCP benchmark audits.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "gcp",
+    "cloud-security",
+    "iam",
+    "organization-policy",
+    "vpc-service-controls",
+    "workload-identity",
+    "cis-benchmark"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "api-security-testing",
+  "version": "1.0.0",
+  "description": "API security assessment for REST, GraphQL, gRPC, and WebSocket interfaces against the OWASP API Security Top 10, including authentication flow audits and secure auth patterns.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "api-security",
+    "owasp-api-top-10",
+    "graphql",
+    "oauth",
+    "jwt",
+    "authorization",
+    "appsec"
+  ]
+}

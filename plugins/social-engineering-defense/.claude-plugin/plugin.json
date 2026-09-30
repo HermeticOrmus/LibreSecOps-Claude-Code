@@ -1,0 +1,20 @@
+{
+  "name": "social-engineering-defense",
+  "version": "1.0.0",
+  "description": "Social engineering defense: analysis of phishing, BEC, vishing, and physical pretexts, organizational exposure assessments, layered technical and human controls, and awareness programs.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "social-engineering",
+    "phishing",
+    "bec",
+    "email-security",
+    "dmarc",
+    "security-awareness"
+  ]
+}

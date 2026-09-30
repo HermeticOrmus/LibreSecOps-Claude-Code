@@ -1,0 +1,20 @@
+{
+  "name": "secrets-management",
+  "version": "1.0.0",
+  "description": "Secrets management: leaked secret detection, vault architecture with HashiCorp Vault and cloud secret managers, secret injection, and credential rotation.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "secrets",
+    "vault",
+    "secret-scanning",
+    "gitleaks",
+    "credential-rotation",
+    "secrets-manager"
+  ]
+}

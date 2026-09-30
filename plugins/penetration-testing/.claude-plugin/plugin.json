@@ -1,0 +1,20 @@
+{
+  "name": "penetration-testing",
+  "version": "1.0.0",
+  "description": "Penetration testing methodology for authorized assessments: scoping and rules of engagement, attack surface mapping, test planning, and risk-rated vulnerability analysis.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "penetration-testing",
+    "pentest",
+    "ptes",
+    "owasp-testing-guide",
+    "attack-surface",
+    "cvss"
+  ]
+}

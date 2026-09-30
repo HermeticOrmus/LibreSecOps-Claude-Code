@@ -1,0 +1,21 @@
+{
+  "name": "kubernetes-security",
+  "version": "1.0.0",
+  "description": "Kubernetes security: cluster hardening, RBAC audits, Pod Security Standards, NetworkPolicy, and admission control with Gatekeeper or Kyverno.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "kubernetes",
+    "k8s",
+    "rbac",
+    "pod-security",
+    "network-policy",
+    "kyverno",
+    "gatekeeper"
+  ]
+}

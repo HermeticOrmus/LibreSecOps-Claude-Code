@@ -1,0 +1,211 @@
+{
+  "name": "libre-secops",
+  "owner": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "metadata": {
+    "description": "Security operations plugins for Claude Code: threat modeling, detection and incident response, authorized security testing, cloud and container security, application security, and compliance.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "api-security-testing",
+      "source": "./plugins/api-security-testing",
+      "description": "API security assessment for REST, GraphQL, gRPC, and WebSocket interfaces against the OWASP API Security Top 10, including authentication flow audits and secure auth patterns.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "blue-team-detection",
+      "source": "./plugins/blue-team-detection",
+      "description": "Detection engineering and threat hunting: Sigma and YARA rules with SIEM translations, detection-as-code, and hypothesis-driven hunts mapped to MITRE ATT&CK.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "bug-bounty-methodology",
+      "source": "./plugins/bug-bounty-methodology",
+      "description": "Methodology for authorized bug bounty programs: scope-respecting reconnaissance, attack surface mapping, and vulnerability reports that triagers can reproduce.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "cloud-security-aws",
+      "source": "./plugins/cloud-security-aws",
+      "description": "Defensive AWS security: IAM, S3, VPC, KMS, and logging architecture reviews, CIS and Well-Architected compliance audits, and hardening patterns.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "cloud-security-azure",
+      "source": "./plugins/cloud-security-azure",
+      "description": "Defensive Azure security: Entra ID, Conditional Access, RBAC, networking, storage, and Key Vault reviews, plus CIS Azure and Microsoft Cloud Security Benchmark audits.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "cloud-security-gcp",
+      "source": "./plugins/cloud-security-gcp",
+      "description": "Defensive Google Cloud security: IAM and Workload Identity, Organization Policies, VPC Service Controls, and CIS GCP benchmark audits.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "compliance-frameworks",
+      "source": "./plugins/compliance-frameworks",
+      "description": "Compliance assessment, gap analysis, and audit evidence planning for SOC 2, ISO 27001, PCI DSS, HIPAA, GDPR, and NIST frameworks.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "container-security",
+      "source": "./plugins/container-security",
+      "description": "Container security for Docker and Podman: Dockerfile and Compose hardening, image vulnerability scanning with SBOMs, and runtime isolation.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "cryptography-essentials",
+      "source": "./plugins/cryptography-essentials",
+      "description": "Cryptography guidance: algorithm and parameter selection, password hashing, key management and rotation, TLS configuration, and crypto code audits.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "devsecops-pipelines",
+      "source": "./plugins/devsecops-pipelines",
+      "description": "Security-integrated CI/CD: pipeline security architecture, SAST, SCA, secrets, IaC, and container scanning in GitHub Actions, GitLab CI, and Jenkins, and build-breaking security gates.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "forensics-analysis",
+      "source": "./plugins/forensics-analysis",
+      "description": "Digital forensics for authorized investigations: investigation planning, chain of custody, disk and artifact analysis, timelines, and memory forensics with Volatility.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "identity-access-management",
+      "source": "./plugins/identity-access-management",
+      "description": "Identity and access management: IAM architecture, SSO and MFA design, RBAC/ABAC/ReBAC access control models, authentication flow review, and access audits.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "incident-response",
+      "source": "./plugins/incident-response",
+      "description": "Security incident response: incident command and coordination, forensic evidence handling, playbooks for common incident types, and blameless postmortems.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "kubernetes-security",
+      "source": "./plugins/kubernetes-security",
+      "description": "Kubernetes security: cluster hardening, RBAC audits, Pod Security Standards, NetworkPolicy, and admission control with Gatekeeper or Kyverno.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "malware-analysis",
+      "source": "./plugins/malware-analysis",
+      "description": "Defensive malware analysis for incident responders: triage, static and sandbox-based dynamic analysis in an isolated lab, IOC extraction, and detection signatures.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "mobile-app-security",
+      "source": "./plugins/mobile-app-security",
+      "description": "Mobile application security for Android and iOS: OWASP MASVS/MASTG assessments, secure code review, hardening checklists, and mobile crypto patterns.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "network-security",
+      "source": "./plugins/network-security",
+      "description": "Network security: firewall rules, segmentation and trust zones, IDS/IPS with Suricata, Snort, and Zeek, VPN review, and network audits.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "penetration-testing",
+      "source": "./plugins/penetration-testing",
+      "description": "Penetration testing methodology for authorized assessments: scoping and rules of engagement, attack surface mapping, test planning, and risk-rated vulnerability analysis.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "privacy-engineering",
+      "source": "./plugins/privacy-engineering",
+      "description": "Privacy engineering: privacy by design, GDPR data protection impact assessments, personal data flow mapping, and technical privacy controls.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "red-team-operations",
+      "source": "./plugins/red-team-operations",
+      "description": "Adversary simulation planning for authorized red and purple team engagements: rules of engagement, MITRE ATT&CK mapping, and detection validation.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "secrets-management",
+      "source": "./plugins/secrets-management",
+      "description": "Secrets management: leaked secret detection, vault architecture with HashiCorp Vault and cloud secret managers, secret injection, and credential rotation.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "secure-coding-practices",
+      "source": "./plugins/secure-coding-practices",
+      "description": "Secure coding: security-focused code review, injection prevention, secure authentication and session patterns, and targeted vulnerability fixes.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "security-automation",
+      "source": "./plugins/security-automation",
+      "description": "Security orchestration, automation, and response (SOAR): platform selection, playbook design, and working automation for alert enrichment, phishing triage, and containment with human approval gates.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "security-awareness",
+      "source": "./plugins/security-awareness",
+      "description": "Security awareness training and policy: role-based training, authorized phishing simulations for an organization's own staff, and plain-language security policies mapped to regulations.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "security-hardening",
+      "source": "./plugins/security-hardening",
+      "description": "System hardening and CIS Benchmark assessment for Linux and Windows hosts, containers, Kubernetes, web servers, databases, and cloud accounts, with implementation and verification steps.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "siem-log-management",
+      "source": "./plugins/siem-log-management",
+      "description": "SIEM and log management: SIEM architecture and log source planning, detection and hunting queries in Splunk SPL, Elastic KQL/EQL, and Sentinel KQL, and cross-source event correlation.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "social-engineering-defense",
+      "source": "./plugins/social-engineering-defense",
+      "description": "Social engineering defense: analysis of phishing, BEC, vishing, and physical pretexts, organizational exposure assessments, layered technical and human controls, and awareness programs.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "supply-chain-security",
+      "source": "./plugins/supply-chain-security",
+      "description": "Software supply chain security: dependency vulnerability and license audits, SBOM generation, and detection of typosquatting, dependency confusion, and compromised packages.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "threat-modeling",
+      "source": "./plugins/threat-modeling",
+      "description": "Threat modeling with STRIDE, attack trees, DREAD risk ranking, and MITRE ATT&CK mapping that turns a design into ranked threats with concrete mitigations.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "vulnerability-scanning",
+      "source": "./plugins/vulnerability-scanning",
+      "description": "Vulnerability scanning and triage for systems you own or are authorized to assess: scanner selection across SAST, SCA, container, IaC, cloud, and secrets, plus CVSS and exploitability-based prioritization.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "web-application-security",
+      "source": "./plugins/web-application-security",
+      "description": "Web application security: OWASP Top 10 (2021) source code audits and cross-site scripting analysis with context-correct fixes for common web frameworks.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "zero-trust-architecture",
+      "source": "./plugins/zero-trust-architecture",
+      "description": "Zero trust architecture: NIST SP 800-207 design, CISA maturity assessments, and microsegmentation with network policies, service mesh authorization, and workload identity.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "libre-secops-hooks",
+      "source": "./plugins/libre-secops-hooks",
+      "description": "Optional security hooks: a one-line security profile of the project at session start, a confirmation prompt before Claude edits secret or key files, and a local pattern scan for vulnerabilities after each edit.",
+      "version": "1.0.0"
+    }
+  ]
+}

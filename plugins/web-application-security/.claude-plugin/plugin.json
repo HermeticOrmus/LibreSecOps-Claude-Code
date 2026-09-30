@@ -1,0 +1,20 @@
+{
+  "name": "web-application-security",
+  "version": "1.0.0",
+  "description": "Web application security: OWASP Top 10 (2021) source code audits and cross-site scripting analysis with context-correct fixes for common web frameworks.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "web-security",
+    "owasp-top-10",
+    "xss",
+    "appsec",
+    "secure-code-review",
+    "injection"
+  ]
+}
