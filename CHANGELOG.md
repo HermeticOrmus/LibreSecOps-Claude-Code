@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- A public pantry in `pantry/`: a competitor map, an X mine, a people mine and a pantry queue, every row cited. `pantry/MENU.md`, generated from the queue, names the next piece of work anyone can take.
+- Two issue forms: routing miss (Claude picked the wrong agent or skill, or none) and plugin proposal. Proposals for offensive-capable work keep the authorized-engagements framing.
+- A Ways to contribute section in CONTRIBUTING.md, with the local test loop, and a Contribute section in the README.
+
 ## [1.0.1] - 2026-09-30
 
 ### Fixed

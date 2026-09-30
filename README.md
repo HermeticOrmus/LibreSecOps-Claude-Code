@@ -196,6 +196,17 @@ Starred this? Tell us what worked and what is missing: [open a feedback issue](h
 
 ---
 
+## Contribute
+
+- Take the next piece of work from the [Menu](pantry/MENU.md), or start with a [good first issue](https://github.com/HermeticOrmus/LibreSecOps-Claude-Code/contribute).
+- Claude picked the wrong agent or skill? File a [routing miss](https://github.com/HermeticOrmus/LibreSecOps-Claude-Code/issues/new?template=routing-miss.yml).
+- Have a plugin in mind? Open a [plugin proposal](https://github.com/HermeticOrmus/LibreSecOps-Claude-Code/issues/new?template=plugin-proposal.yml). Anything else goes in the [feedback form](https://github.com/HermeticOrmus/LibreSecOps-Claude-Code/issues/new?template=feedback.yml).
+- Share threat models, detection rules and playbooks in [Discussions](https://github.com/HermeticOrmus/LibreSecOps-Claude-Code/discussions).
+
+How to claim an item and test a change locally: [Ways to contribute](CONTRIBUTING.md#ways-to-contribute). Report a vulnerability in this repo through [Security Advisories](https://github.com/HermeticOrmus/LibreSecOps-Claude-Code/security/advisories/new), not a public issue.
+
+---
+
 ## Contributing
 
 PRs welcome — especially: more depth on cloud security per platform, regional compliance translations (LATAM LGPD, India DPDP, etc.), real-world incident case studies (anonymized), supply-chain attack postmortems.
