@@ -1,0 +1,20 @@
+{
+  "name": "libre-secops-hooks",
+  "version": "1.0.0",
+  "description": "Optional security hooks: a one-line security profile of the project at session start, a confirmation prompt before Claude edits secret or key files, and a local pattern scan for vulnerabilities after each edit.",
+  "author": {
+    "name": "Diego Bodart",
+    "url": "https://github.com/HermeticOrmus"
+  },
+  "homepage": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "repository": "https://github.com/HermeticOrmus/LibreSecOps-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "hooks",
+    "security",
+    "secret-detection",
+    "static-analysis",
+    "secure-coding",
+    "guardrails"
+  ]
+}
