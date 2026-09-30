@@ -5,7 +5,7 @@
 <h1 align="center">LibreSecOps Claude Code</h1>
 
 <p align="center">
-  <em>Security operations with Claude Code — 32 specialized plugins covering DevSecOps, threat modeling, incident response, penetration testing, and cloud security</em>
+  <em>Security operations with Claude Code — 32 specialized plugins plus an optional hooks plugin, covering DevSecOps, threat modeling, incident response, authorized penetration testing, and cloud security</em>
 </p>
 
 <p align="center">
@@ -33,10 +33,11 @@ Karpathy, December 2025: programming is being refactored. For security specifica
 
 | Claude Code component | LibreSecOps provides |
 |---|---|
-| **Plugins** | 32 subdomain plugins (threat modeling, IR, pentesting, cloud sec, app sec, compliance, more) |
-| **Agents** | Specialist agents per plugin (threat modeler, IR commander, pentester, blue team analyst) |
-| **Commands** | Quick-access slash commands per plugin |
-| **Skills** | Pattern libraries (STRIDE, MITRE ATT&CK mappings, OWASP categories, NIST controls) |
+| **Plugins** | 32 subdomain plugins (threat modeling, IR, pentesting, cloud sec, app sec, compliance, more) plus the optional `libre-secops-hooks` plugin |
+| **Agents** | 64 specialist agents, two per plugin (threat modeler, incident commander, pentest planner, detection engineer, and more) |
+| **Commands** | 53 slash commands, namespaced by plugin (for example `/threat-modeling:threat-model`) |
+| **Skills** | 57 pattern libraries (STRIDE, MITRE ATT&CK mappings, OWASP categories, NIST controls) |
+| **Hooks** | Optional: a security profile of the project at session start, a confirmation prompt before edits to secret files, and a vulnerability pattern scan after each edit |
 | **Templates** | Threat model templates, IR playbooks, audit-evidence scaffolds |
 
 ---
@@ -45,73 +46,95 @@ Karpathy, December 2025: programming is being refactored. For security specifica
 
 ### Defensive operations (Blue team)
 
-| Plugin | Domain |
-|---|---|
-| **threat-modeling** ⭐ | STRIDE, attack trees, MITRE ATT&CK mapping |
-| blue-team-detection | Detection engineering, alerting, SIEM rule design |
-| incident-response | IR playbooks, containment, forensics handoff |
-| siem-log-management | Log normalization, alert tuning, threat hunting |
-| forensics-analysis | Digital forensics, evidence chain, memory analysis |
-| security-automation | SOAR, playbook automation, response orchestration |
-| security-awareness | Phishing training, user education, social engineering defense |
-| social-engineering-defense | Anti-phishing, anti-pretexting, anti-vishing |
+| Plugin | Domain | Agents |
+|---|---|---|
+| **threat-modeling** ⭐ | STRIDE, attack trees, MITRE ATT&CK mapping | `attack-tree-builder`, `threat-modeler` |
+| blue-team-detection | Detection engineering, alerting, SIEM rule design | `detection-engineer`, `threat-hunter` |
+| incident-response | IR playbooks, containment, forensics handoff | `forensic-analyst`, `incident-commander` |
+| siem-log-management | Log normalization, alert tuning, threat hunting | `log-analyst`, `siem-architect` |
+| forensics-analysis | Digital forensics, evidence chain, memory analysis | `digital-forensics-examiner`, `memory-forensics-analyst` |
+| malware-analysis | Static + dynamic analysis, sandboxing, IoC extraction | `dynamic-analyst`, `static-analyst` |
+| security-automation | SOAR, playbook automation, response orchestration | `automation-builder`, `soar-architect` |
+| security-awareness | Phishing training, user education, social engineering defense | `policy-writer`, `security-trainer` |
+| social-engineering-defense | Anti-phishing, anti-pretexting, anti-vishing | `awareness-program-designer`, `social-engineering-analyst` |
 
-### Offensive operations (Red team)
+### Offensive operations (Red team, authorized testing only)
 
-| Plugin | Domain |
-|---|---|
-| penetration-testing | Pentest methodology (PTES, OSSTMM), scoping, reporting |
-| red-team-operations | Adversary emulation, C2 design, persistence techniques |
-| bug-bounty-methodology | Recon, vulnerability discovery, responsible disclosure |
-| social-engineering-defense | (paired with the offensive variant) |
-| vulnerability-scanning | Scanner selection (Nessus, Qualys, OpenVAS), false-positive triage |
-| api-security-testing | API fuzzing, BOLA, BFLA, mass assignment, GraphQL-specific |
-| web-application-security | OWASP Top 10, XSS, SQLi, CSRF, authentication flaws |
+| Plugin | Domain | Agents |
+|---|---|---|
+| penetration-testing | Pentest methodology (PTES, OWASP Testing Guide, NIST SP 800-115), scoping, rules of engagement, reporting | `pentest-planner`, `vuln-researcher` |
+| red-team-operations | Adversary emulation planning, rules of engagement, MITRE ATT&CK mapping, detection validation | `red-team-lead`, `ttp-researcher` |
+| bug-bounty-methodology | Recon, vulnerability discovery, responsible disclosure | `bug-bounty-hunter`, `vuln-report-writer` |
+| vulnerability-scanning | Scanner selection (Nessus, Qualys, OpenVAS), false-positive triage | `vuln-scanner-orchestrator`, `vuln-triager` |
+| api-security-testing | OWASP API Top 10: BOLA, BFLA, mass assignment, auth flows, GraphQL-specific | `api-security-tester`, `auth-flow-auditor` |
+| web-application-security | OWASP Top 10, XSS, SQLi, CSRF, authentication flaws | `web-security-auditor`, `xss-hunter` |
 
 ### Cloud security
 
-| Plugin | Domain |
-|---|---|
-| cloud-security-aws | AWS IAM, KMS, GuardDuty, Security Hub, well-architected security pillar |
-| cloud-security-azure | Azure AD, Defender, Sentinel, Conditional Access |
-| cloud-security-gcp | GCP IAM, Security Command Center, BeyondCorp, Cloud Armor |
-| container-security | Image scanning, runtime security, SBOM, Distroless |
-| kubernetes-security | Pod Security Standards, RBAC, NetworkPolicies, OPA Gatekeeper |
-| serverless-patterns | Lambda security, Functions-as-a-Service IAM, event injection |
+| Plugin | Domain | Agents |
+|---|---|---|
+| cloud-security-aws | AWS IAM, KMS, GuardDuty, Security Hub, well-architected security pillar | `aws-compliance-auditor`, `aws-security-architect` |
+| cloud-security-azure | Azure AD, Defender, Sentinel, Conditional Access | `azure-compliance-auditor`, `azure-security-architect` |
+| cloud-security-gcp | GCP IAM, Security Command Center, Organization Policies, VPC Service Controls | `gcp-org-policy-auditor`, `gcp-security-architect` |
+| container-security | Image scanning, runtime security, SBOM, Distroless | `container-hardener`, `image-scanner` |
+| kubernetes-security | Pod Security Standards, RBAC, NetworkPolicies, OPA Gatekeeper | `k8s-policy-enforcer`, `k8s-security-architect` |
 
 ### Application + supply chain security
 
-| Plugin | Domain |
-|---|---|
-| secure-coding-practices | Language-specific anti-patterns (SQL injection, deserialization, etc.) |
-| supply-chain-security | SBOM, SLSA, dependency confusion, typosquatting defense |
-| devsecops-pipelines | Shift-left security, SAST/DAST/SCA in CI |
-| cryptography-essentials | Symmetric vs asymmetric, key management, common mistakes (ECB, IV reuse) |
-| secrets-management | Vault, AWS Secrets Manager, GCP Secret Manager, rotation patterns |
-| mobile-app-security | OWASP Mobile Top 10, certificate pinning, keychain security |
+| Plugin | Domain | Agents |
+|---|---|---|
+| secure-coding-practices | Language-specific anti-patterns (SQL injection, deserialization, etc.) | `input-validation-specialist`, `secure-code-reviewer` |
+| supply-chain-security | SBOM, SLSA, dependency confusion, typosquatting defense | `dependency-auditor`, `package-integrity-analyst` |
+| devsecops-pipelines | Shift-left security, SAST/DAST/SCA in CI | `devsecops-architect`, `pipeline-security-integrator` |
+| cryptography-essentials | Symmetric vs asymmetric, key management, common mistakes (ECB, IV reuse) | `crypto-advisor`, `tls-specialist` |
+| secrets-management | Vault, AWS Secrets Manager, GCP Secret Manager, rotation patterns | `secret-scanner`, `secrets-architect` |
+| mobile-app-security | OWASP MASVS and MASTG, certificate pinning, keychain security | `mobile-code-reviewer`, `mobile-security-tester` |
 
 ### Identity + access
 
-| Plugin | Domain |
-|---|---|
-| identity-access-management | RBAC, ABAC, OAuth2, OIDC, SAML, just-in-time access |
-| zero-trust-architecture | Beyond perimeter, identity-first networking, microsegmentation |
-| privacy-engineering | GDPR, CCPA, data minimization, privacy-by-design patterns |
+| Plugin | Domain | Agents |
+|---|---|---|
+| identity-access-management | RBAC, ABAC, OAuth2, OIDC, SAML, just-in-time access | `access-control-auditor`, `iam-architect` |
+| zero-trust-architecture | Beyond perimeter, identity-first networking, microsegmentation | `microsegmentation-specialist`, `zero-trust-architect` |
+| privacy-engineering | GDPR, CCPA, data minimization, privacy-by-design patterns | `dpia-analyst`, `privacy-engineer` |
 
 ### Compliance + governance
 
-| Plugin | Domain |
-|---|---|
-| compliance-frameworks | SOC 2, ISO 27001, PCI DSS, HIPAA, NIST CSF mappings |
-| security-hardening | CIS benchmarks, host hardening, network hardening, OS-specific configs |
-| malware-analysis | Static + dynamic analysis, sandboxing, IoC extraction |
-| network-security | Firewall design, segmentation, IDS/IPS, DPI, DNS security |
+| Plugin | Domain | Agents |
+|---|---|---|
+| compliance-frameworks | SOC 2, ISO 27001, PCI DSS, HIPAA, NIST CSF mappings | `compliance-auditor`, `evidence-collector` |
+| security-hardening | CIS benchmarks, host hardening, network hardening, OS-specific configs | `benchmark-auditor`, `hardening-specialist` |
+| network-security | Firewall design, segmentation, IDS/IPS, DNS security | `ids-ips-engineer`, `network-security-architect` |
 
-⭐ = depth-complete plugin (substantive expert content). Remaining 31 plugins are shell-improved with depth scheduled for v0.3-v0.5.
+⭐ = flagship plugin, the first taken to full depth (see the 0.2.0 entry in the [CHANGELOG](CHANGELOG.md)). Every plugin ships two agents, one or two slash commands, and one to three skills.
+
+### Optional hooks plugin
+
+| Plugin | What it does |
+|---|---|
+| libre-secops-hooks | At session start, one line of security context about the project (stack, auth libraries, infrastructure, security tooling, gaps such as a `.env` tracked by git). Before an edit to a `.env`, key, or credentials file, a confirmation prompt. After each edit, a local pattern scan for injection, XSS, hardcoded secrets, weak crypto, and Dockerfile issues. See [its README](plugins/libre-secops-hooks/README.md). |
 
 ---
 
 ## Quick start
+
+### Install from Claude Code
+
+```
+/plugin marketplace add HermeticOrmus/LibreSecOps-Claude-Code
+/plugin install threat-modeling@libre-secops
+```
+
+Install any other plugin the same way (`/plugin install <plugin>@libre-secops`), or open `/plugin` to browse the pack. From a terminal, the equivalent is:
+
+```bash
+claude plugin marketplace add HermeticOrmus/LibreSecOps-Claude-Code
+claude plugin install threat-modeling@libre-secops
+```
+
+The optional hooks plugin installs the same way: `/plugin install libre-secops-hooks@libre-secops` (it needs `jq`; see [its README](plugins/libre-secops-hooks/README.md)). Restart Claude Code after installing.
+
+### Install the whole pack with setup.sh
 
 ```bash
 git clone https://github.com/HermeticOrmus/LibreSecOps-Claude-Code.git ~/projects/LibreSecOps-Claude-Code
@@ -119,11 +142,17 @@ cd ~/projects/LibreSecOps-Claude-Code
 ./setup.sh
 ```
 
+`setup.sh` registers the checkout as a plugin marketplace and installs every plugin through the Claude Code CLI, including `libre-secops-hooks`. It needs `claude` and `jq` on your PATH. Useful flags: `--list` shows the plugins, `--only threat-modeling,incident-response` installs a subset (leave `libre-secops-hooks` out of the list to skip the hooks), `--scope project` installs for the current project only, and `--uninstall` removes the pack.
+
+### Use it
+
 Then in any Claude Code session:
 
 ```
-/threat-model build a STRIDE threat model for a SaaS application with multi-tenant data, OAuth2 social login, file upload, and a public REST API
+/threat-modeling:threat-model build a STRIDE threat model for a SaaS application with multi-tenant data, OAuth2 social login, file upload, and a public REST API
 ```
+
+Plugin commands are namespaced as `/<plugin>:<command>`, so the `/threat-model` command in the plugin docs runs as `/threat-modeling:threat-model`. Agents are chosen automatically from their descriptions, or you can call one directly, for example `@agent-incident-response:incident-commander`.
 
 See [QUICK_START.md](QUICK_START.md) for the full walkthrough.
 
@@ -144,6 +173,7 @@ See [QUICK_START.md](QUICK_START.md) for the full walkthrough.
 - **Compliance frameworks**: SOC 2, ISO 27001, PCI DSS, HIPAA, NIST CSF, FedRAMP, GDPR
 - **Languages**: Python, TypeScript, Go, Rust, Java, .NET
 - **Skill level**: developers entering security through senior security engineers
+- **Claude Code**: installs as a plugin marketplace (tested with Claude Code 2.1.285); the hooks plugin needs `bash` and `jq`
 
 ---
 
@@ -157,6 +187,12 @@ This is documentation + prompt-engineering. It is **not**:
 - An audit certification
 
 For regulated systems, retain licensed security counsel and accredited auditors.
+
+---
+
+## Feedback
+
+Starred this? Tell us what worked and what is missing: [open a feedback issue](https://github.com/HermeticOrmus/LibreSecOps-Claude-Code/issues/new?template=feedback.yml). Every piece of feedback gets an answer, and changes that come from it are credited in the release notes.
 
 ---
 
