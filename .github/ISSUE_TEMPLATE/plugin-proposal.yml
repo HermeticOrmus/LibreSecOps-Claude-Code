@@ -1,0 +1,53 @@
+name: Plugin proposal
+description: Propose a new plugin, agent, skill or command for this pack.
+title: "[Proposal] "
+labels: ["plugin-proposal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Good proposals name a real job people do in this domain, what Claude gets wrong today without it, and how anyone could check it works. Accepted proposals can become Menu items that you or someone else builds.
+
+        Offensive-capable proposals (penetration testing, red teaming, recon, scanning, exploitation, phishing simulation) keep the pack's framing: authorized engagements, agreed scope or isolated labs only, with the agent confirming authorization before it produces test steps.
+  - type: input
+    id: name
+    attributes:
+      label: Working name
+      placeholder: "kebab-case, e.g. llm-application-security"
+    validations:
+      required: true
+  - type: textarea
+    id: job
+    attributes:
+      label: The job it does
+      description: Who needs it, and what they are trying to get done.
+      placeholder: "Teams shipping an LLM feature need a review of prompt injection, excessive agency and output handling before launch."
+    validations:
+      required: true
+  - type: textarea
+    id: gap
+    attributes:
+      label: What goes wrong today without it
+      placeholder: "Claude reviews the web layer but has no checklist for the OWASP Top 10 for LLM Applications."
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+      description: A check anyone could run to see it works. For example, a prompt, the agent or skill that should answer, and what the answer must contain.
+      placeholder: "Asking 'threat model my RAG support bot' routes to llm-application-security:<agent>, and the answer maps each finding to LLM01:2025 to LLM10:2025."
+    validations:
+      required: true
+  - type: textarea
+    id: prior
+    attributes:
+      label: Prior art
+      description: Other packs, tools or docs that do something similar, with links.
+      placeholder: "Links to other Claude Code plugins, Cursor rules, MCP servers, OWASP or NIST documents."
+  - type: checkboxes
+    id: build
+    attributes:
+      label: Want to build it?
+      options:
+        - label: I would like to build this and open a pull request.
