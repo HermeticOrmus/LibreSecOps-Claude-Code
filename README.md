@@ -134,6 +134,23 @@ claude plugin install threat-modeling@libre-secops
 
 The optional hooks plugin installs the same way: `/plugin install libre-secops-hooks@libre-secops` (it needs `jq`; see [its README](plugins/libre-secops-hooks/README.md)). Restart Claude Code after installing.
 
+### Install in Grok Build
+
+Grok Build reads the same plugin folders. Add the marketplace, then install any plugin by name:
+
+```bash
+grok plugin marketplace add HermeticOrmus/LibreSecOps-Claude-Code
+grok plugin install threat-modeling@libre-secops --trust
+```
+
+Or install one plugin straight from its folder, without adding the marketplace:
+
+```bash
+grok plugin install HermeticOrmus/LibreSecOps-Claude-Code#plugins/threat-modeling --trust
+```
+
+`--trust` confirms you trust the source; without it Grok shows what the plugin would activate and stops. Start a new Grok session to load what you installed. From a clone, `./setup.sh --grok` installs the whole pack through the `grok` CLI. The `libre-secops-hooks` plugin uses a hook format Grok supports, but it has not been verified in a live Grok session (see the [ledger](LEDGER.md)).
+
 ### Install the whole pack with setup.sh
 
 ```bash
@@ -142,7 +159,7 @@ cd ~/projects/LibreSecOps-Claude-Code
 ./setup.sh
 ```
 
-`setup.sh` registers the checkout as a plugin marketplace and installs every plugin through the Claude Code CLI, including `libre-secops-hooks`. It needs `claude` and `jq` on your PATH. Useful flags: `--list` shows the plugins, `--only threat-modeling,incident-response` installs a subset (leave `libre-secops-hooks` out of the list to skip the hooks), `--scope project` installs for the current project only, and `--uninstall` removes the pack.
+`setup.sh` registers the checkout as a plugin marketplace and installs every plugin through the Claude Code CLI, including `libre-secops-hooks`. It needs `claude` and `jq` on your PATH. Useful flags: `--list` shows the plugins, `--only threat-modeling,incident-response` installs a subset (leave `libre-secops-hooks` out of the list to skip the hooks), `--scope project` installs for the current project only, and `--uninstall` removes the pack. Add `--grok` to install through Grok Build instead; it works with `--list`, `--only`, and `--uninstall`, and needs `grok` and `jq`.
 
 ### Use it
 
@@ -174,6 +191,7 @@ See [QUICK_START.md](QUICK_START.md) for the full walkthrough.
 - **Languages**: Python, TypeScript, Go, Rust, Java, .NET
 - **Skill level**: developers entering security through senior security engineers
 - **Claude Code**: installs as a plugin marketplace (tested with Claude Code 2.1.285); the hooks plugin needs `bash` and `jq`
+- **Grok Build**: installs as a plugin marketplace (tested with grok 1.0.44); the hooks plugin has not been verified in a live Grok session
 
 ---
 
@@ -193,6 +211,8 @@ For regulated systems, retain licensed security counsel and accredited auditors.
 ## Feedback
 
 Starred this? Tell us what worked and what is missing: [open a feedback issue](https://github.com/HermeticOrmus/LibreSecOps-Claude-Code/issues/new?template=feedback.yml). Every piece of feedback gets an answer, and changes that come from it are credited in the release notes.
+
+Cracks we found and sealed: [LEDGER.md](LEDGER.md).
 
 ---
 
