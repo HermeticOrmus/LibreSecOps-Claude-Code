@@ -1,3 +1,8 @@
+---
+name: "security-policy-templates"
+description: "Reference templates and structure for common security policies (acceptable use, incident reporting, information classification), the policy, standard, procedure, and guideline hierarchy, regulatory mapping, review cycles, progressive enforcement, and exception management. Use when writing, customizing, or auditing security policies."
+---
+
 # Security Policy Templates
 
 > Reference templates and frameworks for common security policies with guidance on customization, enforcement, and regulatory alignment.

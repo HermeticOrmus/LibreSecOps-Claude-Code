@@ -1,3 +1,8 @@
+---
+name: "security-gates"
+description: "Security gate reference: gate types, severity matrices, risk-based gating with CVSS, EPSS, and KEV, differential gating for new code, application-tiered gates, and an override process. Use when deciding when a finding should break the build."
+---
+
 # Security Gates
 
 > Quality gate definitions, threshold configuration, and the decision framework for when to break the build versus when to warn.

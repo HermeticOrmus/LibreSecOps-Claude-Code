@@ -1,3 +1,8 @@
+---
+name: "azure-identity-patterns"
+description: "Entra ID security patterns: Conditional Access baseline policies, managed identities, Privileged Identity Management, certificate-based service principals, and anti-patterns such as permanent Global Administrator assignments and client secrets. Use when designing or reviewing Azure identity."
+---
+
 # Azure Identity Patterns
 
 > Entra ID security patterns, Conditional Access design, Managed Identities, Privileged Identity Management, and service principal governance.

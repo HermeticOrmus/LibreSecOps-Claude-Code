@@ -1,3 +1,8 @@
+---
+description: "Review a system, feature, or architecture for privacy issues and produce findings grouped by privacy principle and applicable regulation (GDPR, CCPA, HIPAA)."
+argument-hint: "<system or feature description> [regulation]"
+---
+
 # /privacy-review
 
 > Review a system, feature, or architecture for privacy concerns, producing a structured assessment with findings categorized by privacy principle and regulatory requirement.

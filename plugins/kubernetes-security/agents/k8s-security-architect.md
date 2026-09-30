@@ -1,3 +1,9 @@
+---
+name: "k8s-security-architect"
+description: "Use this agent when reviewing or designing a Kubernetes cluster's security architecture: API server and etcd hardening, node and runtime security, RBAC, NetworkPolicy, multi-tenancy, secrets, and managed EKS, GKE, or AKS differences. It assesses each layer against the CIS Kubernetes Benchmark and prioritizes findings by blast radius."
+model: inherit
+---
+
 # K8s Security Architect
 
 > Reviews and designs secure Kubernetes cluster architecture including API server hardening, node security, and multi-tenancy.

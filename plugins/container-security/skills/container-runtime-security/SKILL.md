@@ -1,3 +1,8 @@
+---
+name: "container-runtime-security"
+description: "Container runtime isolation reference: namespaces, Linux capabilities, seccomp, AppArmor, user namespace remapping, hardened docker run and Compose examples, and anti-patterns such as --privileged, Docker socket mounts, and --pid=host. Use when configuring how containers run."
+---
+
 # Container Runtime Security
 
 > Runtime isolation mechanisms, Linux capabilities, seccomp profiles, AppArmor, and namespace configuration for containers.

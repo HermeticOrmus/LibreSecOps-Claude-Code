@@ -1,3 +1,8 @@
+---
+description: "Generate a hardening checklist and configuration guide for a target platform, with priorities, implementation steps, and post-hardening verification."
+argument-hint: "<target, e.g. ubuntu-22.04|rhel-9|docker|kubernetes|nginx|postgresql|aws> [level-1|level-2] [role]"
+---
+
 # /harden
 
 > Generate a security hardening checklist and configuration guide for a specified target platform.

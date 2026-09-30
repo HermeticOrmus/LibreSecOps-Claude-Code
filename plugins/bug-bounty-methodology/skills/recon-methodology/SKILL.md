@@ -1,3 +1,8 @@
+---
+name: "recon-methodology"
+description: "Reconnaissance methodology for authorized bug bounty programs: passive recon (certificate transparency, search engine and code dorking, historical URLs), in-scope active recon (subdomain enumeration, live host probing, content and JavaScript analysis), and attack surface mapping. Use when scoping recon inside a program's published rules."
+---
+
 # Recon Methodology
 
 > Comprehensive reconnaissance methodology for authorized bug bounty programs covering subdomain enumeration, technology fingerprinting, content discovery, and attack surface mapping.

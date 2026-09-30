@@ -1,3 +1,8 @@
+---
+description: "Create an adversary simulation plan for an authorized engagement: threat scenario, scope, rules of engagement, safety controls, and phased operations, optionally as a purple team exercise."
+argument-hint: "<organization description> <objective> [threat actor] [--purple]"
+---
+
 # /red-team-plan
 
 > Create a structured adversary simulation plan with threat scenario, scope, rules of engagement, and phased operation design.

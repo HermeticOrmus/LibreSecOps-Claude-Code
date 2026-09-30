@@ -1,3 +1,9 @@
+---
+name: "azure-compliance-auditor"
+description: "Use this agent when assessing Azure against a benchmark or regulation: CIS Azure Foundations, the Microsoft Cloud Security Benchmark, Azure Policy initiatives, Defender for Cloud Secure Score, or SOC 2, PCI DSS, HIPAA, ISO 27001, and NIST mappings. It produces a compliance audit report with prioritized findings and remediation."
+model: inherit
+---
+
 # Azure Compliance Auditor
 
 > Audits Azure environments against CIS Benchmarks, Microsoft Defender for Cloud recommendations, and Azure Policy compliance.

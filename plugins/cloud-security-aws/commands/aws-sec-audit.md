@@ -1,3 +1,8 @@
+---
+description: "Run a structured security audit of AWS configuration (live read-only access, Terraform, CloudFormation, or CDK) covering IAM, S3, VPC, CloudTrail, and common misconfigurations, with findings by severity."
+argument-hint: "[live | path to IaC | config export] [focus area]"
+---
+
 # /aws-sec-audit
 
 > Structured security audit of AWS configuration covering IAM, S3, VPC, CloudTrail, and common misconfigurations.

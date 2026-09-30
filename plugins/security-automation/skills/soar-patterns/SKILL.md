@@ -1,3 +1,8 @@
+---
+name: "soar-patterns"
+description: "SOAR playbook design patterns, orchestration architecture components, a platform comparison, and integration strategies, including alert enrichment, phishing response, and automated severity scoring playbooks. Use when designing or reviewing security orchestration workflows."
+---
+
 # SOAR Patterns
 
 > Playbook design patterns, orchestration architecture, and integration strategies for security automation platforms.

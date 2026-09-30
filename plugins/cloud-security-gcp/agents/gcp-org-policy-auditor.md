@@ -1,3 +1,9 @@
+---
+name: "gcp-org-policy-auditor"
+description: "Use this agent when auditing GCP governance: Organization Policy constraints (boolean, list, custom CEL), CIS GCP Foundations controls, Security Command Center findings, and resource hierarchy design. It produces a constraint and benchmark gap report with recommended org policies."
+model: inherit
+---
+
 # GCP Organization Policy Auditor
 
 > Audits GCP Organization Policy constraints, resource hierarchy compliance, and alignment with CIS GCP Foundations Benchmark.

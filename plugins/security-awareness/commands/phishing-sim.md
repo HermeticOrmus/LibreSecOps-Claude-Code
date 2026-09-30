@@ -1,3 +1,8 @@
+---
+description: "Design an authorized phishing awareness simulation for an organization's own staff, with scenarios by difficulty level, measurement criteria, and follow-up training material."
+argument-hint: "<organization and target audience> [beginner|intermediate|advanced]"
+---
+
 # /phishing-sim
 
 > Design a phishing awareness simulation exercise with realistic scenarios, difficulty progression, measurement criteria, and educational follow-up materials.

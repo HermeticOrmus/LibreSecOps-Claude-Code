@@ -1,3 +1,8 @@
+---
+name: "gdpr-requirements"
+description: "GDPR reference for technology teams: key definitions, Article 5 principles, lawful bases, data subject rights, data protection by design, processor duties, breach notification, DPIAs, a SaaS compliance checklist, and a data deletion pattern. Use when building or reviewing systems that process EU personal data."
+---
+
 # GDPR Requirements
 
 > GDPR compliance patterns for technology organizations covering data processing principles, data subject rights, technical and organizational measures, and breach notification.

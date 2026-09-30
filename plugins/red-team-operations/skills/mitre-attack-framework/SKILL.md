@@ -1,3 +1,8 @@
+---
+name: "mitre-attack-framework"
+description: "MITRE ATT&CK Enterprise reference: tactics, key techniques with procedures, data sources, detection guidance, and mitigations. Use when mapping behavior to technique IDs, building detections, or planning authorized emulation."
+---
+
 # MITRE ATT&CK Framework
 
 > Reference knowledge covering ATT&CK Enterprise tactics, selected key techniques with detection guidance, and framework usage for adversary emulation planning.

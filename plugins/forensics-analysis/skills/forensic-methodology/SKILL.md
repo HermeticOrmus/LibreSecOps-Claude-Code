@@ -1,3 +1,8 @@
+---
+name: "forensic-methodology"
+description: "Forensic methodology following NIST SP 800-86 and ISO 27037: the forensic process, order of volatility (RFC 3227), evidence integrity, KAPE triage collection, and disk imaging with dc3dd and ewfacquire. Use when collecting or preserving evidence during an investigation."
+---
+
 # Forensic Methodology
 
 > Evidence collection, preservation, analysis, and reporting methodology following NIST SP 800-86 and ISO 27037 standards.

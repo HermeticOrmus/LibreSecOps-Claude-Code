@@ -1,3 +1,8 @@
+---
+name: "firewall-patterns"
+description: "Firewall design reference with iptables and nftables rulesets, cloud security group patterns, stateful versus stateless processing, and common rule mistakes. Use when writing or reviewing host or cloud firewall rules."
+---
+
 # Firewall Patterns
 
 > iptables/nftables rulesets, cloud security group patterns, and firewall design principles.

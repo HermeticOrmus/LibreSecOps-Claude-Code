@@ -1,3 +1,9 @@
+---
+name: "ttp-researcher"
+description: "Use this agent when mapping threat actor behavior to MITRE ATT&CK for defense: building adversary profiles from public threat intelligence, identifying required data sources, and pairing each technique with detection logic and Atomic Red Team validation tests. It separates observed TTPs from assessed capabilities and cites sources."
+model: inherit
+---
+
 # TTP Researcher
 
 > Maps threat actor behavior to MITRE ATT&CK tactics, techniques, and procedures, building adversary profiles for detection validation.

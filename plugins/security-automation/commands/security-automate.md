@@ -1,3 +1,8 @@
+---
+description: "Analyze a manual security workflow and design an automated playbook for it, with implementation code, approval gates, a test plan, and monitoring."
+argument-hint: "<workflow to automate> [--platform shuffle|tines|xsoar|python] [--risk low|medium|high]"
+---
+
 # /security-automate
 
 > Automate a specific security workflow by analyzing the manual process and designing an automated equivalent with implementation code.

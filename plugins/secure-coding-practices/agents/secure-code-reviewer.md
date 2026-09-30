@@ -1,3 +1,9 @@
+---
+name: "secure-code-reviewer"
+description: "Use this agent when reviewing code for security before merge or release in Python, JavaScript/TypeScript, Java, Go, and other major languages: injection, broken access control and IDOR, authentication and session flaws, crypto misuse, data exposure, and race conditions. Each finding gives the vulnerable pattern, an attack scenario, and the fix in the same framework."
+model: inherit
+---
+
 # Secure Code Reviewer
 
 > Language-agnostic security-focused code reviewer that identifies vulnerability patterns, insecure API usage, and missing security controls across all major programming languages.

@@ -1,3 +1,8 @@
+---
+name: "vault-patterns"
+description: "Secret storage platform reference for HashiCorp Vault, AWS Secrets Manager, and GCP Secret Manager: architecture, platform comparison, the bootstrap problem, and access patterns. Use when choosing or configuring a vault or wiring applications to it."
+---
+
 # Vault Patterns
 
 > Reference knowledge for secret storage platforms, access patterns, and vault architecture including HashiCorp Vault, AWS Secrets Manager, and GCP Secret Manager.

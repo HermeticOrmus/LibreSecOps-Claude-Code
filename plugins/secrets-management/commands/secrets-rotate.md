@@ -1,3 +1,8 @@
+---
+description: "Plan and document a rotation procedure for a specific credential (cloud key, database password, API key, TLS certificate), covering every place it is used and how to verify the cutover."
+argument-hint: "<credential type> <where it is used> [--emergency] [--service name]"
+---
+
 # /secrets-rotate
 
 > Plan and document a secret rotation procedure for identified credentials.

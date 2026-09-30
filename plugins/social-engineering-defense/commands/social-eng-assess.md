@@ -1,3 +1,8 @@
+---
+description: "Assess an organization's exposure to social engineering (phishing, BEC, vishing, physical), identify defense gaps, and prioritize recommendations."
+argument-hint: "<organization profile> [current defenses] [incident history]"
+---
+
 # /social-eng-assess
 
 > Assess an organization's vulnerability to social engineering attacks, identifying risk factors, current defense gaps, and prioritized recommendations.

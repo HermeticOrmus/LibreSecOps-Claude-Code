@@ -1,3 +1,8 @@
+---
+name: "adversary-emulation"
+description: "Methodology for threat-intelligence-based adversary emulation within written rules of engagement: lifecycle, TIBER-EU and MITRE emulation plans, safety controls, phased scenarios, and atomic testing with benign indicators. Use when designing an authorized emulation or purple team exercise."
+---
+
 # Adversary Emulation
 
 > Methodology for building adversary emulation plans based on real threat intelligence, including scenario design, phased operations, and atomic testing patterns.

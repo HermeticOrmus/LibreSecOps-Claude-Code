@@ -1,3 +1,8 @@
+---
+description: "Map a threat actor or intel report to MITRE ATT&CK techniques and generate a detection validation checklist, optionally with Sigma stubs, Atomic Red Team test IDs, or an ATT&CK Navigator layer."
+argument-hint: "<threat actor, intel report, or attack pattern> [--detection] [--atomic] [--navigator]"
+---
+
 # /attack-map
 
 > Map threat actor TTPs to MITRE ATT&CK techniques and generate a detection validation checklist.

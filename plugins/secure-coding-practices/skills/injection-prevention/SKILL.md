@@ -1,3 +1,8 @@
+---
+name: "injection-prevention"
+description: "Injection prevention patterns for SQL, XSS, command injection, path traversal, LDAP, and template injection across major languages, including edge cases such as ORDER BY, IN clauses, and second-order injection. Use when writing or fixing code that builds queries, commands, paths, or HTML from input."
+---
+
 # Injection Prevention
 
 > Comprehensive injection prevention patterns for SQL, XSS, command injection, path traversal, LDAP, and template injection across all major languages and frameworks.

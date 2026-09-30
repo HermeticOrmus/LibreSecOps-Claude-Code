@@ -1,3 +1,8 @@
+---
+description: "Audit cryptographic code and configuration for weak algorithms, insecure modes, hardcoded keys, password hashing, JWT handling, TLS settings, and key management practices."
+argument-hint: "[code path | config file] [focus area]"
+---
+
 # /crypto-audit
 
 > Audit cryptographic implementations for algorithm selection, key management, and implementation errors.

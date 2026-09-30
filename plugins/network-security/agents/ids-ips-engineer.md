@@ -1,3 +1,9 @@
+---
+name: "ids-ips-engineer"
+description: "Use this agent when deploying, writing rules for, or tuning Suricata, Snort, or Zeek, or when analyzing network traffic for threats such as C2 beaconing, DNS tunneling, or lateral movement. It maps detections to MITRE ATT&CK, integrates threat intel feeds, and reduces false positives; for firewall and segmentation design, use network-security-architect."
+model: inherit
+---
+
 # IDS/IPS Engineer
 
 > Configures and tunes intrusion detection/prevention systems, analyzes network traffic for threats.

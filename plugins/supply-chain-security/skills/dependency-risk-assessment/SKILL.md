@@ -1,3 +1,8 @@
+---
+name: "dependency-risk-assessment"
+description: "Methodology for scoring dependency risk across vulnerability history, maintainer health, dependency depth, license compatibility, and provenance, with a triage matrix, a new-dependency evaluation checklist, automated monitoring, and a pinning strategy. Use when deciding whether to adopt, update, or replace a package."
+---
+
 # Dependency Risk Assessment
 
 > Methodology for scoring and prioritizing dependency risk across vulnerability history, maintainer health, dependency depth, license compatibility, and provenance.

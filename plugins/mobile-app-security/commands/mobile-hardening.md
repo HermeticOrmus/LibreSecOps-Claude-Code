@@ -1,3 +1,8 @@
+---
+description: "Generate a platform-specific hardening checklist for an Android or iOS app covering data storage, network security, binary protections, and anti-tampering, matched to a target MASVS level."
+argument-hint: "<android|ios> [framework] [L1|L2|L2+R]"
+---
+
 # /mobile-hardening
 
 > Generate a platform-specific hardening checklist for an Android or iOS application, covering data storage, network security, binary protections, and anti-tampering.

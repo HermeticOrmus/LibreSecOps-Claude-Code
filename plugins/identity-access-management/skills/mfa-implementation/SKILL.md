@@ -1,3 +1,8 @@
+---
+name: "mfa-implementation"
+description: "MFA reference covering factor types, NIST AAL levels, WebAuthn/FIDO2 registration, TOTP implementation, enforcement middleware with step-up auth, and bypass risks such as SMS SIM swap and prompt bombing. Use when adding or hardening multi-factor authentication."
+---
+
 # MFA Implementation
 
 > MFA methods, integration patterns, bypass prevention, and phishing-resistant authentication.

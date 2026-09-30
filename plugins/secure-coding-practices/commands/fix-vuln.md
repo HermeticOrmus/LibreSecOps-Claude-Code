@@ -1,3 +1,8 @@
+---
+description: "Fix a specific vulnerability in the provided code with root cause analysis, a corrected implementation, and verification steps."
+argument-hint: "<vulnerability description> [file or code]"
+---
+
 # /fix-vuln
 
 > Fix a specific vulnerability class in provided code, with root cause analysis, the corrected implementation, and verification guidance.

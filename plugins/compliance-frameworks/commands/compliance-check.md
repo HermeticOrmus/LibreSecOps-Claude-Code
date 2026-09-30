@@ -1,3 +1,8 @@
+---
+description: "Assess a system against a compliance framework and produce a gap analysis report of implemented, partial, and missing controls."
+argument-hint: "<soc2|gdpr|pci-dss|hipaa|iso27001|nist-800-53|nist-csf> [scope]"
+---
+
 # /compliance-check
 
 > Assess a system against a specified compliance framework and produce a gap analysis report.

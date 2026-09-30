@@ -1,3 +1,8 @@
+---
+description: "Audit a project's dependencies for known vulnerabilities, license risk, integrity issues, and maintainer health, optionally generating an SBOM."
+argument-hint: "[--sbom] [--format spdx|cyclonedx] [--deep]"
+---
+
 # /supply-chain-audit
 
 > Audit a project's dependencies for known vulnerabilities, license risks, integrity issues, and supply chain health.

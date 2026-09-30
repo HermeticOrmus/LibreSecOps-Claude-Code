@@ -1,3 +1,8 @@
+---
+description: "Audit web application source code against the OWASP Top 10 (2021) and produce a structured report with findings, fixes, and framework-specific hardening."
+argument-hint: "[directories or files] [framework] [severity threshold]"
+---
+
 # /owasp-scan
 
 > Audit source code against the OWASP Top 10 (2021), producing a structured security assessment report.

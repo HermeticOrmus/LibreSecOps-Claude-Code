@@ -1,3 +1,8 @@
+---
+name: "siem-query-languages"
+description: "Reference for Splunk SPL, Elastic KQL/EQL, and Microsoft Sentinel KQL with security query examples, a cross-platform conversion cheat sheet, Sigma for write-once rules, and query performance tips. Use when writing or translating SIEM queries."
+---
+
 # SIEM Query Languages
 
 > Reference for Splunk SPL, Elastic KQL/EQL, and Microsoft Sentinel KQL with security-focused query patterns and platform comparison.

@@ -1,3 +1,8 @@
+---
+name: "cis-benchmarks"
+description: "Reference CIS Benchmark controls with audit and remediation commands for Linux (Ubuntu and Debian), Docker, Kubernetes, and AWS Foundations, plus hardening automation and a prioritization framework. Use when hardening a system or checking a configuration against CIS controls."
+---
+
 # CIS Benchmarks
 
 > Reference knowledge base for CIS Benchmark controls across common platforms: Linux, Docker, Kubernetes, AWS, PostgreSQL, Nginx, and more.

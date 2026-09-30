@@ -1,3 +1,8 @@
+---
+name: "gcp-iam-patterns"
+description: "GCP IAM reference: the permission model, role types, deny policies, least-privilege service accounts, Workload Identity Federation for CI, custom roles, domain-restricted sharing, and GKE Workload Identity. Use when writing or reviewing GCP IAM bindings."
+---
+
 # GCP IAM Patterns
 
 > Secure GCP IAM patterns, custom role design, IAM conditions, Workload Identity Federation, and the GCP permission model.

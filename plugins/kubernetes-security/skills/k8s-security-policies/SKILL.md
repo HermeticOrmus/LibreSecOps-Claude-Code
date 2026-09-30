@@ -1,3 +1,8 @@
+---
+name: "k8s-security-policies"
+description: "Pod Security Standards and Pod Security Admission, NetworkPolicy fundamentals with default-deny and service-to-service patterns, restricted-profile pod security contexts, and Kyverno examples. Use when hardening workloads or writing NetworkPolicy and admission rules."
+---
+
 # K8s Security Policies
 
 > Pod Security Standards, NetworkPolicy patterns, admission control strategies, and workload security enforcement.

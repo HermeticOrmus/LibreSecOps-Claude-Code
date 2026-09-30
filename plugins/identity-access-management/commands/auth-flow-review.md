@@ -1,3 +1,8 @@
+---
+description: "Review authentication and authorization flows (OAuth 2.0/OIDC, SAML SSO, JWT, session cookies, API auth) for security issues, covering session management, token handling, authorization, and password storage."
+argument-hint: "<code, config, or flow description> [oauth|saml|jwt|session]"
+---
+
 # /auth-flow-review
 
 > Review authentication and authorization flows for security issues.

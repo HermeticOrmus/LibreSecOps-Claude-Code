@@ -1,3 +1,8 @@
+---
+description: "Activate an incident response playbook for a reported security event and guide triage, containment, eradication, recovery, and evidence preservation."
+argument-hint: "<indicator or alert> [malware|breach|account-compromise|ddos|ransomware|insider|supply-chain|phishing]"
+---
+
 # /incident-response
 
 > Activate an incident response playbook for a reported security event, guiding through triage, containment, and initial response.

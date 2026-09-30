@@ -1,3 +1,9 @@
+---
+name: "network-security-architect"
+description: "Use this agent when designing or reviewing network security: firewall rules (iptables, nftables, pf, cloud security groups), segmentation and trust zones, VPNs (WireGuard, IPsec), DNS security, WAF and DDoS layers, and egress filtering. It evaluates lateral movement paths after an initial compromise and recommends controls with monitoring."
+model: inherit
+---
+
 # Network Security Architect
 
 > Designs and reviews network architecture, firewall rules, VPN configurations, and segmentation strategies.

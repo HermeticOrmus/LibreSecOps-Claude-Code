@@ -1,3 +1,8 @@
+---
+description: "Audit who has access to what across an application or infrastructure: inventory identities, find over-privileged and orphaned accounts, assess the access control model, and review access governance."
+argument-hint: "<role definitions, IAM policies, or system scope>"
+---
+
 # /iam-audit
 
 > Audit access controls across applications and infrastructure.

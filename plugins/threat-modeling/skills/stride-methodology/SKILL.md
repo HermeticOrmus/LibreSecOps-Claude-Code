@@ -1,3 +1,8 @@
+---
+name: "stride-methodology"
+description: "STRIDE-per-element analysis with threat catalogs and mitigation patterns for common components (web applications, APIs, databases, message queues, cloud services) and an incremental threat modeling process. Use when walking a system or data flow diagram through STRIDE in depth."
+---
+
 # STRIDE Methodology
 
 > Detailed STRIDE analysis patterns with threat catalogs for common architectural components including web applications, APIs, databases, message queues, and cloud services.

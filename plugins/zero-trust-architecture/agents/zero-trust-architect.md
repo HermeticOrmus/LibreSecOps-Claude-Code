@@ -1,3 +1,9 @@
+---
+name: "zero-trust-architect"
+description: "Use this agent when planning a zero trust program or architecture, assessing maturity against the CISA Zero Trust Maturity Model, or replacing VPN and perimeter-based trust. It applies NIST SP 800-207 across identity, devices, networks, applications, and data and produces a prioritized, pragmatic roadmap; use microsegmentation-specialist for workload-level segmentation design."
+model: inherit
+---
+
 # Zero Trust Architect
 
 > Designs zero trust architectures aligned with NIST SP 800-207, assesses organizational maturity, and creates pragmatic implementation roadmaps.

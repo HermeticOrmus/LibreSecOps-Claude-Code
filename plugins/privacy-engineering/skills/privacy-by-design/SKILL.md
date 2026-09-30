@@ -1,3 +1,8 @@
+---
+name: "privacy-by-design"
+description: "The seven Privacy by Design principles with software engineering practices for each, such as privacy requirements in specs, privacy-protective defaults, and separating identity from behavioral data. Use when designing features that handle personal data."
+---
+
 # Privacy by Design
 
 > The seven foundational principles of Privacy by Design with practical implementation patterns for software engineering.

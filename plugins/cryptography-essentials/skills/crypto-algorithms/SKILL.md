@@ -1,3 +1,8 @@
+---
+name: "crypto-algorithms"
+description: "Algorithm selection guide: a decision tree for cryptographic choices, key size guidelines, modes of operation, and worked examples for authenticated encryption with libsodium, Argon2id password hashing, and Ed25519 signatures. Use when picking an algorithm, mode, or key size."
+---
+
 # Crypto Algorithms
 
 > Algorithm selection guide -- when to use what, key sizes, modes of operation, and the decision tree for cryptographic choices.

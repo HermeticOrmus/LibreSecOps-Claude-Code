@@ -1,3 +1,8 @@
+---
+name: "api-auth-patterns"
+description: "Secure implementation patterns for API authentication and authorization: OAuth 2.0 flows, JWT best practices, API key handling with constant-time comparison, mTLS, session management, authorization middleware, token refresh, and rate limiting. Use when building or reviewing API auth code."
+---
+
 # API Authentication Patterns
 
 > Secure authentication and authorization implementation patterns for APIs, covering OAuth 2.0, JWT, API keys, mTLS, and session management.

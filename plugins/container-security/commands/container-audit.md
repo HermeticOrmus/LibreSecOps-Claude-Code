@@ -1,3 +1,8 @@
+---
+description: "Audit Dockerfiles and Docker or Podman Compose files for security issues such as root users, unpinned images, secrets in layers, and excess privileges, with fixes."
+argument-hint: "[Dockerfile or compose file paths] [focus area]"
+---
+
 # /container-audit
 
 > Audit Dockerfiles and docker-compose/podman-compose files for security issues.

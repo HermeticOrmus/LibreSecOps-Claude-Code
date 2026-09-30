@@ -1,3 +1,8 @@
+---
+description: "Audit Kubernetes RBAC: flag over-permissive roles and bindings, review service account tokens, and trace privilege escalation paths at cluster and namespace level."
+argument-hint: "<cluster context, RBAC manifests, or namespace>"
+---
+
 # /k8s-rbac-audit
 
 > Focused audit of Kubernetes RBAC configuration, identifying overly permissive roles and privilege escalation paths.

@@ -1,3 +1,8 @@
+---
+description: "Run a structured security audit of a GCP project or organization (live gcloud access, Terraform, or config export) covering IAM, Organization Policies, networking, storage, and logging, with findings by severity."
+argument-hint: "[live | path to IaC | config export] [focus area]"
+---
+
 # /gcp-sec-audit
 
 > Structured security audit of GCP configuration covering IAM, GCS, VPC, Cloud Audit Logs, and Organization Policies.
