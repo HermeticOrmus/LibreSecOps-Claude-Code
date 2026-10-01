@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Security operations plugins for Claude Code: threat modeling, detection and incident response, authorized security testing, cloud and container security, application security, and compliance.",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "plugins": [
     {
